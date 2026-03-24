@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#e9f3ff",
+              "on-error": "#690005",
+              "on-secondary-fixed-variant": "#474646",
+              "on-primary": "#68000c",
+              "secondary": "#c8c6c5",
+              "on-tertiary-fixed": "#001e30",
+              "primary-fixed-dim": "#ff4500",
+              "inverse-surface": "#f0f0f0",
+              "on-tertiary": "#00344f",
+              "surface-container-low": "#0f0f0f",
+              "outline-variant": "#2a2a2a",
+              "surface-container-high": "#141414",
+              "outline": "#ae8785",
+              "error-container": "#93000a",
+              "surface-bright": "#393939",
+              "on-error-container": "#ffdad6",
+              "tertiary": "#888888",
+              "primary-fixed": "#ffdad7",
+              "surface-container-lowest": "#050505",
+              "secondary-fixed-dim": "#c8c6c5",
+              "on-primary-fixed": "#410004",
+              "primary": "#ff4500",
+              "on-secondary-container": "#bab8b7",
+              "inverse-primary": "#c0001f",
+              "on-primary-fixed-variant": "#930015",
+              "secondary-fixed": "#f0f0f0",
+              "primary-container": "#ff4500",
+              "inverse-on-surface": "#313030",
+              "error": "#ffb4ab",
+              "surface-dim": "#050505",
+              "on-background": "#f0f0f0",
+              "background": "#050505",
+              "on-tertiary-fixed-variant": "#004b70",
+              "surface-container-highest": "#1a1a1a",
+              "on-surface-variant": "#888888",
+              "surface-variant": "#1a1a1a",
+              "on-secondary-fixed": "#0f0f0f",
+              "on-secondary": "#313030",
+              "surface-tint": "#ff4500",
+              "surface": "#050505",
+              "tertiary-fixed-dim": "#888888",
+              "tertiary-fixed": "#cae6ff",
+              "secondary-container": "#4a4949",
+              "on-surface": "#f0f0f0",
+              "tertiary-container": "#4b5563",
+              "on-primary-container": "#ffeeed",
+              "surface-container": "#0f0f0f"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Epilogue"],
+              "label": ["Epilogue"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Epilogue', sans-serif;
+            background-color: #050505;
+        }
+        .liquid-glass {
+            background: rgba(53, 53, 52, 0.4);
+            backdrop-filter:blur(28px);
+            -webkit-backdrop-filter:blur(28px);
+        }
+        .ambient-glow {
+            background: radial-gradient(circle at top right, rgba(255,69,0, 0.08), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(255,69,0, 0.03), transparent 40%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+
+</style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<!-- Ambient Background Texture -->
+<div class="fixed inset-0 ambient-glow pointer-events-none z-0"></div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 flex-grow flex items-center justify-center p-6">
+<!-- Login Card -->
+<div class="liquid-glass w-full max-w-[440px] rounded-2xl p-10 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-outline-variant/10 relative overflow-hidden group">
+<!-- Subtle internal glow -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary-container/10 blur-[80px] rounded-2xl"></div>
+<!-- Brand Header -->
+<div class="mb-12 text-center">
+<h1 class="text-4xl font-extrabold tracking-tighter text-on-surface mb-2">Planzo</h1>
+<p class="text-on-surface-variant font-medium tracking-tight opacity-70">Elevate your focus.</p>
+</div>
+<!-- Form -->
+<form action="#" class="space-y-6">
+<!-- Username Field -->
+<div class="space-y-2">
+<label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant/80 ml-1">Username or Email</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest/50 border-none rounded-2xl px-4 py-4 text-on-surface placeholder:text-on-secondary-container/30 focus:ring-1 focus:ring-primary-container transition-all duration-300" placeholder="curator@ethereal.io" type="text"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant/80">Password</label>
+<a class="text-[10px] uppercase tracking-widest text-primary hover:text-primary-container transition-colors" href="#">Forgot?</a>
+</div>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest/50 border-none rounded-2xl px-4 py-4 text-on-surface placeholder:text-on-secondary-container/30 focus:ring-1 focus:ring-primary-container transition-all duration-300" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- Primary CTA -->
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-4 rounded-2xl shadow-[0_8px_24px_-4px_rgba(255,69,0,0.4)] hover:scale-[1.02] active:scale-95 transition-all duration-300 mt-4" type="submit">
+                    Login
+                </button>
+</form>
+<!-- Divider Section -->
+<div class="relative my-10 flex items-center">
+<div class="flex-grow border-t border-outline-variant/10"></div>
+<span class="mx-4 text-[10px] uppercase tracking-[0.3em] text-on-surface-variant/40 font-bold">Or continue with</span>
+<div class="flex-grow border-t border-outline-variant/10"></div>
+</div>
+<!-- Social Logins -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<button class="flex items-center justify-center gap-3 bg-surface-container-high/40 border border-outline-variant/10 py-3 rounded-2xl hover:bg-surface-container-highest/60 transition-all duration-300">
+<img alt="" class="w-5 h-5 opacity-80" data-alt="Google colorful logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnKiQrolta9pslP0tD74_JQ3PnDjVFWe7vUA9BKMUHoSNCtYsA6YC61p5ohrIHgX3rjVRlRaJ2tXCneif_xTVi8X0oP6Nn6uueoINQLclAp-4XzZLoBOYczu-ohE6EJGr5azYAEXhOKtQWN4Bz3GRy1aeWKTc3KtHDsBmMOIUGyzQAp1-UOisstqYfQ8rZsbmeISdmO30e6aORCAMWKX1uWIbGRbZlngx5lqaC1d80GfmlEHx2Q212Be8xF1EpoxoqSBnlt9c0UUU"/>
+<span class="text-xs font-semibold tracking-tight text-on-surface">Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 bg-surface-container-high/40 border border-outline-variant/10 py-3 rounded-2xl hover:bg-surface-container-highest/60 transition-all duration-300">
+<img alt="" class="w-4 h-4" data-alt="Microsoft square logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuh__TsqKqhrPsf-GWk-2l29zP7C8LE0Bt34NCwRImbu7zjvaIykfWTCOX2jtGVnqGyzBzB_n9HWqoLYCiYtOy_3vvCWql2ELibEqF_julncyYA2B9aAsdiT5nnbvikIH6i-9cYnLN5bYq6F64OmK3C8ffETs5Y6d8MWPbSQfsX26_jbAB16NrhMP9GhKHxJG4cBgN-ye2yAzKN3mzGewljyHfyCaZVaivAbIY7k7F1BVqfRuLAeha2sIR6pjOFD-xR0F4OHbhWSg"/>
+<span class="text-xs font-semibold tracking-tight text-on-surface">Microsoft</span>
+</button>
+</div>
+<!-- Footer Link -->
+<div class="text-center">
+<p class="text-xs text-on-surface-variant/60 font-medium">
+                    Don't have an account? 
+                    <a class="text-primary font-bold hover:underline underline-offset-4 decoration-primary/30 transition-all" href="#">Sign Up</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Content Footer (Minimal Editorial) -->
+<footer class="relative z-10 w-full py-8 px-10 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-outline-variant/5">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant/40">© 2024 Planzo Workspace. Systems Active.</p>
+<div class="flex gap-8">
+<a class="text-[10px] uppercase tracking-widest text-on-surface-variant/40 hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-[10px] uppercase tracking-widest text-on-surface-variant/40 hover:text-primary transition-colors" href="#">Terms</a>
+<a class="text-[10px] uppercase tracking-widest text-on-surface-variant/40 hover:text-primary transition-colors" href="#">Security</a>
+</div>
+</footer>
+<script src="/js/pwa.js"></script>
+</body></html>

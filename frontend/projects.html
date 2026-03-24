@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<title>Planzo — Projects</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"#ff4500","on-surface":"#f0f0f0","on-surface-variant":"#9ca3af","surface":"#111111","surface-container":"#141414","surface-container-high":"#181818","surface-container-highest":"#1e1e1e","outline-variant":"#2a2a2a"},fontFamily:{display:["'Clash Display'","sans-serif"],body:["'Inter'","sans-serif"]},borderRadius:{DEFAULT:"1rem",sm:"0.75rem",md:"1rem",lg:"1.5rem",xl:"2rem",full:"9999px"}}}}</script>
+<style>
+  *{font-family:'Inter',sans-serif;font-weight:400;}
+  h1,h2,h3,h4,.font-display{font-family:'Clash Display',sans-serif;}
+  body{background:#0c0c0c;min-height:100vh;color:#f0f0f0;overflow-x:hidden;}
+  .glass{background:rgba(20,20,20,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.06);border-radius:1rem;}
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .no-scrollbar::-webkit-scrollbar{display:none;}
+  .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none;}
+  .sidebar{background:#101010;border-right:1px solid rgba(255,255,255,0.04);width:240px;min-height:100vh;position:fixed;left:0;top:0;z-index:40;display:flex;flex-direction:column;transition:transform 0.3s ease;}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#6b7280;font-size:13px;font-weight:400;border-radius:10px;margin:2px 12px;transition:all 0.2s;}
+  .sidebar-link:hover{background:rgba(255,255,255,0.04);color:#e5e5e5;}
+  .sidebar-link.active{background:rgba(255,69,0,0.08);color:#ff4500;font-weight:500;}
+  .sidebar-link .material-symbols-outlined{font-size:20px;}
+  .project-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:18px;transition:all 0.25s;cursor:pointer;}
+  .project-card:hover{border-color:rgba(255,69,0,0.25);background:rgba(30,30,30,0.9);transform:translateY(-2px);}
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+  @media (max-width: 768px) {
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0 !important;}
+    .mobile-header{display:flex !important;}
+  }
+  @media (min-width: 769px) {
+    .mobile-header{display:none !important;}
+  }
+</style>
+</head>
+<body class="text-on-surface bg-[#0a0a0a]">
+<aside class="sidebar no-scrollbar">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2.5 mb-1">
+      <img src="/images/icon-192.png" alt="Planzo" class="w-8 h-8 rounded-lg"/>
+      <span class="text-lg font-display font-semibold text-white tracking-tight">Planzo</span>
+    </div>
+  </div>
+  <nav class="flex-1 py-2">
+    <a href="dashboard.html" class="sidebar-link"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+    <a href="projects.html" class="sidebar-link active"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">folder</span>Projects</a>
+    <a href="calendar.html" class="sidebar-link"><span class="material-symbols-outlined">calendar_today</span>Calendar</a>
+    <a href="draw.html" class="sidebar-link"><span class="material-symbols-outlined">draw</span>Whiteboard</a>
+    <div class="mt-6 mb-2 px-6"><div class="h-px bg-white/5"></div></div>
+    <a href="notifications.html" class="sidebar-link" id="notif-link">
+      <span class="material-symbols-outlined">notifications</span>Notifications
+      <span id="notif-badge" class="hidden ml-auto text-[10px] bg-[#ff4500] text-white w-5 h-5 rounded-full flex items-center justify-center font-semibold"></span>
+    </a>
+    <a href="settings.html" class="sidebar-link"><span class="material-symbols-outlined">settings</span>Settings</a>
+  </nav>
+  <div class="p-4 border-t border-white/5">
+    <button id="logout-btn" class="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-400/5"><span class="material-symbols-outlined">logout</span>Logout</button>
+  </div>
+</aside>
+
+<header class="mobile-header hidden sticky top-0 z-50 items-center justify-between px-4 py-3 bg-[#0c0c0c]/90 backdrop-blur border-b border-white/5">
+  <button id="menu-toggle" class="material-symbols-outlined text-on-surface-variant">menu</button>
+  <span class="font-display font-semibold text-base">Projects</span>
+  <div class="flex gap-2">
+    <a href="notifications.html" class="material-symbols-outlined text-on-surface-variant text-xl relative">notifications
+      <span id="notif-badge-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-[#ff4500] rounded-full text-white text-[8px] flex items-center justify-center font-bold"></span>
+    </a>
+    <button id="logout-btn-mobile" class="material-symbols-outlined text-on-surface-variant text-xl">logout</button>
+  </div>
+</header>
+
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/50 z-30" onclick="toggleSidebar()"></div>
+
+<main class="main-content" style="margin-left:240px;">
+  <div class="px-6 md:px-10 py-6 max-w-[1400px] mx-auto w-full">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-3xl font-display font-semibold tracking-tight">Projects</h1>
+        <p class="text-on-surface-variant text-sm mt-1">Browse, filter and manage your projects.</p>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="showJoinModal()" class="text-xs text-on-surface-variant hover:text-white border border-white/10 px-4 py-2 rounded-xl transition-colors font-medium">Join</button>
+        <button onclick="showCreateModal()" class="flex items-center gap-2 bg-[#ff4500] hover:bg-[#e63e00] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors">
+          <span class="material-symbols-outlined text-lg">add</span>New Project
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+      <input id="search-input" type="text" placeholder="Search projects..." class="input-styled"/>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="setFilter('all')" id="f-all" class="text-xs px-3 py-2 rounded-full bg-[#ff4500] text-white font-semibold">All</button>
+        <button onclick="setFilter('admin')" id="f-admin" class="text-xs px-3 py-2 rounded-full bg-white/5 text-on-surface-variant hover:text-on-surface">Admin</button>
+        <button onclick="setFilter('manager')" id="f-manager" class="text-xs px-3 py-2 rounded-full bg-white/5 text-on-surface-variant hover:text-on-surface">Manager</button>
+        <button onclick="setFilter('member')" id="f-member" class="text-xs px-3 py-2 rounded-full bg-white/5 text-on-surface-variant hover:text-on-surface">Member</button>
+      </div>
+    </div>
+
+    <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="text-center text-on-surface-variant text-sm py-12 col-span-full">Loading...</div>
+    </div>
+  </div>
+</main>
+
+<div id="create-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-4">
+  <div class="glass w-full max-w-md p-6 rounded-2xl">
+    <h3 class="text-xl font-display font-semibold mb-5">New Project</h3>
+    <form onsubmit="createProject(event)" class="space-y-4">
+      <div><label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-1.5 font-medium">Project Name</label><input id="cp-name" required class="input-styled" placeholder="Design System v2"/></div>
+      <div><label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-1.5 font-medium">Team Name</label><input id="cp-team" required class="input-styled" placeholder="Frontend Team"/></div>
+      <div><label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-1.5 font-medium">Description</label><textarea id="cp-desc" class="input-styled h-20 resize-none" placeholder="Project description"></textarea></div>
+      <div><label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-1.5 font-medium">Deadline</label><input id="cp-deadline" type="date" class="input-styled"/></div>
+      <div class="flex gap-3">
+        <button type="button" onclick="hideModal('create-modal')" class="flex-1 py-3 border border-white/10 rounded-xl text-sm text-on-surface-variant">Cancel</button>
+        <button type="submit" id="cp-btn" class="flex-1 py-3 bg-[#ff4500] rounded-xl text-sm font-semibold text-white">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="join-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-4">
+  <div class="glass w-full max-w-sm p-6 rounded-2xl">
+    <h3 class="text-xl font-display font-semibold mb-5">Join Project</h3>
+    <form onsubmit="joinProject(event)" class="space-y-4">
+      <div><label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-1.5 font-medium">Team Code</label>
+        <input id="join-code" required class="input-styled uppercase" placeholder="ABC123" maxlength="6" style="letter-spacing:0.2em;font-size:1.1rem;text-align:center;"/></div>
+      <div id="join-error" class="hidden text-red-400 text-xs py-2 px-3 bg-red-400/10 rounded-lg"></div>
+      <div class="flex gap-3">
+        <button type="button" onclick="hideModal('join-modal')" class="flex-1 py-3 border border-white/10 rounded-xl text-sm text-on-surface-variant">Cancel</button>
+        <button type="submit" id="join-btn" class="flex-1 py-3 bg-[#ff4500] rounded-xl text-sm font-semibold text-white">Join</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+if (!Api.isLoggedIn()) window.location.href = '/auth.html';
+
+let allProjects = [];
+let currentFilter = 'all';
+
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+document.getElementById('menu-toggle')?.addEventListener('click', toggleSidebar);
+
+document.getElementById('logout-btn')?.addEventListener('click', () => {
+  Api.clearSession();
+  if (window.WS?.disconnect) WS.disconnect();
+  window.location.href = '/';
+});
+document.getElementById('logout-btn-mobile')?.addEventListener('click', () => {
+  Api.clearSession();
+  if (window.WS?.disconnect) WS.disconnect();
+  window.location.href = '/';
+});
+
+function setFilter(f) {
+  currentFilter = f;
+  ['all','admin','manager','member'].forEach(x => {
+    const btn = document.getElementById('f-' + x);
+    if (!btn) return;
+    btn.className = `text-xs px-3 py-2 rounded-full ${x===f ? 'bg-[#ff4500] text-white font-semibold' : 'bg-white/5 text-on-surface-variant hover:text-on-surface'}`;
+  });
+  render();
+}
+
+function render() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = allProjects.filter(p =>
+    (currentFilter === 'all' || p.role === currentFilter) &&
+    (!q || p.name.toLowerCase().includes(q) || p.team_name.toLowerCase().includes(q))
+  );
+
+  const list = document.getElementById('projects-list');
+  if (!filtered.length) {
+    list.innerHTML = '<div class="text-center text-on-surface-variant text-sm py-12 col-span-full">No projects found.</div>';
+    return;
+  }
+
+  const now = new Date();
+  const roleColors = { admin: '#ff4500', manager: '#8b5cf6', member: '#6b7280' };
+
+  list.innerHTML = filtered.map(p => {
+    const pct = p.total_tasks ? Math.round((p.done_tasks / p.total_tasks) * 100) : 0;
+    const dl = p.deadline ? new Date(p.deadline) : null;
+    const isOverdue = dl && dl < now && pct < 100;
+    const daysLeft = dl ? Math.ceil((dl - now) / 86400000) : null;
+    return `<div class="project-card" onclick="window.location.href='projectoverview.html?id=${p.id}'">
+      <div class="flex items-start justify-between mb-2">
+        <div>
+          <div class="flex items-center gap-2 mb-0.5">
+            <h3 class="font-semibold text-sm">${p.name}</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded-full font-semibold" style="background:${roleColors[p.role]}22;color:${roleColors[p.role]}">${p.role}</span>
+          </div>
+          <p class="text-xs text-on-surface-variant">${p.team_name} · <span class="text-[#ff4500] font-mono font-semibold">${p.team_code}</span></p>
+        </div>
+        <div class="flex items-center gap-1">
+          ${p.role === 'admin' ? `<button onclick="deleteProject(event, '${p.id}')" class="material-symbols-outlined text-on-surface-variant/40 hover:text-red-400 text-lg mr-1 flex-shrink-0" style="font-variation-settings:'FILL' 0">delete</button>` : ''}
+          <span class="material-symbols-outlined text-on-surface-variant/30 text-base">chevron_right</span>
+        </div>
+      </div>
+      ${p.description ? `<p class="text-xs text-on-surface-variant mb-2 line-clamp-1">${p.description}</p>` : ''}
+      <div class="flex items-center gap-2 mb-2">
+        <div class="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+          <div class="h-full bg-[#ff4500] rounded-full" style="width:${pct}%"></div>
+        </div>
+        <span class="text-[10px] text-[#ff4500] font-semibold">${pct}%</span>
+      </div>
+      <div class="flex items-center justify-between text-[10px] text-on-surface-variant">
+        <span>${p.pending_tasks || 0} pending · ${p.member_count || 1} member${(p.member_count||1)!==1?'s':''}</span>
+        ${dl ? `<span class="${isOverdue?'text-red-400':daysLeft<=3?'text-amber-400':''}">${isOverdue?'Overdue':daysLeft===0?'Due today':`${daysLeft}d left`}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('search-input').addEventListener('input', render);
+
+async function loadNotifCount() {
+  try {
+    const { count } = await Api.notifications.unreadCount();
+    ['notif-badge','notif-badge-mobile'].forEach(id => {
+      const badge = document.getElementById(id);
+      if (!badge) return;
+      if (count > 0) {
+        badge.textContent = count > 9 ? '9+' : String(count);
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    });
+  } catch {}
+}
+
+async function load() {
+  try {
+    allProjects = await Api.projects.list();
+    render();
+    loadNotifCount();
+  } catch {
+    showToast('Failed to load projects', 'error');
+  }
+}
+
+async function deleteProject(e, id) {
+  e.stopPropagation();
+  if (!confirm('Delete this project permanently?')) return;
+  try { await Api.projects.delete(id); showToast('Project deleted', 'success'); await load(); }
+  catch(err) { showToast(err.message, 'error'); }
+}
+
+async function createProject(e) {
+  e.preventDefault();
+  const btn = document.getElementById('cp-btn');
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+  try {
+    await Api.projects.create({
+      name: document.getElementById('cp-name').value,
+      teamName: document.getElementById('cp-team').value,
+      description: document.getElementById('cp-desc').value,
+      deadline: document.getElementById('cp-deadline').value
+    });
+    hideModal('create-modal');
+    e.target.reset();
+    showToast('Project created!', 'success');
+    await load();
+  } catch(err) {
+    showToast(err.message, 'error');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Create';
+}
+
+async function joinProject(e) {
+  e.preventDefault();
+  const btn = document.getElementById('join-btn');
+  const errEl = document.getElementById('join-error');
+  btn.disabled = true;
+  btn.textContent = 'Joining...';
+  errEl.classList.add('hidden');
+  try {
+    await Api.projects.join(document.getElementById('join-code').value);
+    hideModal('join-modal');
+    showToast('Joined project!', 'success');
+    await load();
+  } catch(err) {
+    errEl.textContent = err.message;
+    errEl.classList.remove('hidden');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Join';
+}
+
+function showCreateModal() { document.getElementById('create-modal').classList.remove('hidden'); }
+function showJoinModal() { document.getElementById('join-modal').classList.remove('hidden'); }
+function hideModal(id) { document.getElementById(id).classList.add('hidden'); }
+['create-modal','join-modal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target.id === id) hideModal(id);
+  });
+});
+
+load();
+</script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>

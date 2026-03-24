@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<title>Planzo — Task</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"#ff4500","on-surface":"#f0f0f0","on-surface-variant":"#9ca3af","surface-container":"#141414","surface-container-high":"#181818","surface-container-highest":"#1e1e1e"},borderRadius:{DEFAULT:"1rem",sm:"0.75rem",full:"9999px"}}}}</script>
+<style>
+  *{font-family:'Inter',sans-serif;font-weight:400;}
+  h1,h2,h3{font-family:'Clash Display',sans-serif;}
+  body{background:#0a0a0a;min-height:100vh;color:#f0f0f0;}
+  .glass{background:rgba(17,17,17,0.75);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.06);border-radius:1rem;}
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .no-scrollbar::-webkit-scrollbar{display:none;}
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.6rem 0.875rem;font-family:'Inter',sans-serif;font-size:0.8125rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+  select.input-styled option{background:#181818;}
+  .priority-badge-critical{background:#ef444420;color:#ef4444;border:1px solid #ef444440;}
+  .priority-badge-high{background:#f9731620;color:#f97316;border:1px solid #f9731640;}
+  .priority-badge-medium{background:#f59e0b20;color:#f59e0b;border:1px solid #f59e0b40;}
+  .priority-badge-low{background:#6b728020;color:#9ca3af;border:1px solid #6b728040;}
+
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+
+
+/* Sidebar */
+  .sidebar{background:#101010;border-right:1px solid rgba(255,255,255,0.04);width:240px;min-height:100vh;position:fixed;left:0;top:0;z-index:40;display:flex;flex-direction:column;transition:transform 0.3s ease;}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#6b7280;font-size:13px;font-weight:400;border-radius:10px;margin:2px 12px;transition:all 0.2s;}
+  .sidebar-link:hover{background:rgba(255,255,255,0.04);color:#e5e5e5;}
+  .sidebar-link.active{background:rgba(255,69,0,0.08);color:#ff4500;font-weight:500;}
+  .sidebar-link .material-symbols-outlined{font-size:20px;}
+
+  /* Stat cards with colored accents */
+  .stat-card{border-radius:16px;padding:20px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.12;border-radius:16px;}
+  .stat-card-yellow{background:#181600;}
+  .stat-card-yellow::before{background:linear-gradient(135deg,#E8D44D,transparent 70%);}
+  .stat-card-green{background:#001808;}
+  .stat-card-green::before{background:linear-gradient(135deg,#4ADE80,transparent 70%);}
+  .stat-card-purple{background:#110024;}
+  .stat-card-purple::before{background:linear-gradient(135deg,#C084FC,transparent 70%);}
+
+  .project-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:20px;transition:all 0.25s;cursor:pointer;}
+  .project-card:hover{border-color:rgba(255,69,0,0.25);background:rgba(30,30,30,0.9);transform:translateY(-2px);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp 0.4s ease forwards;}
+
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+
+  /* Dark form reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.04) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+  /* Mobile: hide sidebar, show bottom nav */
+  @media (max-width: 768px) {
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0 !important;}
+    .mobile-header{display:flex !important;}
+  }
+  @media (min-width: 769px) {
+    .mobile-header{display:none !important;}
+  }
+</style>
+</head>
+<body class="text-on-surface bg-[#0a0a0a]">
+<!-- Sidebar (Desktop) -->
+<aside class="sidebar no-scrollbar">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2.5 mb-1">
+      <img src="/images/icon-192.png" alt="Planzo" class="w-8 h-8 rounded-lg"/>
+      <span class="text-lg font-display font-semibold text-white tracking-tight">Planzo</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 py-2">
+    <a href="dashboard.html" class="sidebar-link">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>Dashboard
+    </a>
+    <a href="projects.html" class="sidebar-link active">
+      <span class="material-symbols-outlined">folder</span>Projects
+    </a>
+    <a href="calendar.html" class="sidebar-link">
+      <span class="material-symbols-outlined">calendar_today</span>Calendar
+    </a>
+    <a href="draw.html" class="sidebar-link">
+      <span class="material-symbols-outlined">draw</span>Whiteboard
+    </a>
+
+    <div class="mt-6 mb-2 px-6">
+      <div class="h-px bg-white/5"></div>
+    </div>
+
+    <a href="notifications.html" class="sidebar-link" id="notif-link">
+      <span class="material-symbols-outlined">notifications</span>Notifications
+      <span id="notif-badge" class="hidden ml-auto text-[10px] bg-[#ff4500] text-white w-5 h-5 rounded-full flex items-center justify-center font-semibold"></span>
+    </a>
+    <a href="settings.html" class="sidebar-link">
+      <span class="material-symbols-outlined">settings</span>Settings
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-white/5">
+    <button id="logout-btn" class="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-400/5">
+      <span class="material-symbols-outlined">logout</span>Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Header -->
+<header class="mobile-header hidden sticky top-0 z-50 items-center justify-between px-4 py-3 bg-[#0c0c0c]/90 backdrop-blur border-b border-white/5">
+  <button id="menu-toggle" class="material-symbols-outlined text-on-surface-variant">menu</button>
+  <span class="font-display font-semibold text-base">Planzo</span>
+  <div class="flex gap-2">
+    <a href="notifications.html" class="material-symbols-outlined text-on-surface-variant text-xl relative">notifications
+      <span id="notif-badge-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-[#ff4500] rounded-full text-white text-[8px] flex items-center justify-center font-bold"></span>
+    </a>
+    <button id="logout-btn-mobile" class="material-symbols-outlined text-on-surface-variant text-xl">logout</button>
+  </div>
+</header>
+
+<!-- Sidebar overlay for mobile -->
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/50 z-30" onclick="toggleSidebar()"></div>
+
+<main class="main-content flex flex-col min-h-screen" style="margin-left:240px;">
+
+  <div class="px-6 md:px-10 py-6 max-w-[1400px] mx-auto w-full flex-1">
+    <div class="flex items-center gap-4 mb-6">
+      <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border border-white/10">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    </div>
+
+<main class="px-4 md:px-0 py-4 pb-20 max-w-[1200px] mx-auto w-full space-y-3">
+
+  <!-- Status Selector -->
+  <div class="glass p-4">
+    <div class="flex items-center justify-between mb-3">
+      <label class="text-xs text-on-surface-variant uppercase tracking-widest">Status</label>
+      <select id="task-status" onchange="quickMoveStatus()" class="input-styled w-auto text-xs py-1.5 px-3" style="width:auto;">
+        <option value="todo">To Do</option>
+        <option value="inprogress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
+    <div id="deadline-timer" class="text-sm text-on-surface-variant hidden"></div>
+  </div>
+
+  <!-- Main Details -->
+  <div class="glass p-4">
+    <div class="flex items-center justify-between mb-2">
+      <label class="text-xs text-on-surface-variant uppercase tracking-widest">Title</label>
+      <span id="priority-badge" class="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase"></span>
+    </div>
+    <input id="task-title" class="input-styled text-base font-semibold mb-4" placeholder="Task title" oninput="markDirty()"/>
+    <label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-2">Description</label>
+    <textarea id="task-desc" class="input-styled h-24 resize-none" placeholder="Describe this task..." oninput="markDirty()"></textarea>
+  </div>
+
+  <!-- Meta -->
+  <div class="glass p-4 grid grid-cols-2 gap-4">
+    <div>
+      <label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-2">Priority</label>
+      <select id="task-priority" onchange="markDirty()" class="input-styled text-xs">
+        <option value="low">Low</option><option value="medium">Medium</option>
+        <option value="high">High</option><option value="critical">Critical</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-2">Deadline</label>
+      <input id="task-deadline" type="date" class="input-styled text-xs" oninput="markDirty()"/>
+    </div>
+    <div>
+      <label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-2">Assignee</label>
+      <select id="task-assignee" onchange="markDirty()" class="input-styled text-xs">
+        <option value="">Unassigned</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-2">Tags</label>
+      <input id="task-tags" class="input-styled text-xs" placeholder="frontend, bug" oninput="markDirty()"/>
+    </div>
+    <div class="col-span-2">
+      <label class="text-xs text-on-surface-variant uppercase tracking-widest block mb-1">Created by</label>
+      <span id="task-creator" class="text-sm text-on-surface-variant">—</span>
+    </div>
+  </div>
+
+  <!-- Files -->
+  <div class="glass p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-base">Attachments</h2>
+      <label class="text-xs text-[#ff4500] border border-[#ff4500]/40 px-3 py-1 rounded-lg cursor-pointer hover:bg-[#ff4500]/10 font-semibold">
+        <span class="material-symbols-outlined text-sm align-middle">upload</span> Upload
+        <input type="file" multiple class="hidden" id="file-upload" onchange="uploadFiles(this.files)"/>
+      </label>
+    </div>
+    <div id="files-list" class="space-y-2">
+      <div class="text-xs text-on-surface-variant">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="glass p-4">
+    <h2 class="text-base mb-3">Notes</h2>
+    <div id="notes-list" class="space-y-2 mb-3">
+      <div class="text-xs text-on-surface-variant">Loading...</div>
+    </div>
+    <div class="flex gap-2">
+      <input id="note-input" class="input-styled flex-1 text-sm" placeholder="Add a note..." onkeydown="if(event.key==='Enter')addNote()"/>
+      <button onclick="addNote()" class="bg-[#ff4500] text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:opacity-90">Add</button>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="glass p-4">
+    <h2 class="text-base mb-3">Activity Timeline</h2>
+    <div id="timeline-list" class="space-y-2">
+      <div class="text-xs text-on-surface-variant">Loading...</div>
+    </div>
+  </div>
+
+</main>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script>
+if (!Api.isLoggedIn()) window.location.href = '/auth.html';
+
+const params = new URLSearchParams(location.search);
+const taskId = params.get('id');
+const projectId = params.get('projectId');
+if (!taskId) history.back();
+
+let task = null, myRole = 'member', members = [], isDirty = false;
+
+function goBack() { window.location.href = `projectoverview.html?id=${projectId}`; }
+
+async function init() {
+  try {
+    [task, members] = await Promise.all([
+      Api.tasks.get(taskId),
+      Api.projects.getMembers(projectId || task?.project_id)
+    ]);
+    myRole = members.find(m => m.id === Api.getUser()?.id)?.role || 'member';
+    populateForm();
+    await Promise.all([loadFiles(), loadNotes(), loadTimeline()]);
+    if (myRole === 'admin') {
+      document.getElementById('delete-btn').classList.remove('hidden');
+    }
+    startTimer();
+    if (myRole === 'member') {
+      document.querySelectorAll('input:not(#note-input), select, textarea').forEach(el => el.disabled = true);
+    }
+  } catch(e) { showToast('Failed to load task', 'error'); }
+}
+
+function populateForm() {
+  document.getElementById('task-title-header').textContent = task.title;
+  document.getElementById('task-title').value = task.title;
+  document.getElementById('task-desc').value = task.description || '';
+  document.getElementById('task-status').value = task.status;
+  document.getElementById('task-priority').value = task.priority;
+  document.getElementById('task-deadline').value = task.deadline || '';
+  document.getElementById('task-tags').value = (() => { try { return JSON.parse(task.tags || '[]').join(', '); } catch { return ''; } })();
+  document.getElementById('task-creator').textContent = task.creator_name || '—';
+
+  const badge = document.getElementById('priority-badge');
+  badge.textContent = task.priority; badge.className = `text-[9px] px-2 py-0.5 rounded-full font-bold uppercase priority-badge-${task.priority}`;
+
+  const sel = document.getElementById('task-assignee');
+  sel.innerHTML = '<option value="">Unassigned</option>' + members.map(m => `<option value="${m.id}" ${m.id === task.assignee_id ? 'selected' : ''}>${m.name} [${m.role}]</option>`).join('');
+
+  if (task.deadline) {
+    const dl = new Date(task.deadline);
+    const diff = dl - Date.now();
+    const dlEl = document.getElementById('deadline-timer');
+    dlEl.classList.remove('hidden');
+    if (diff < 0) dlEl.innerHTML = `<span class="text-red-400">⚠ Overdue by ${Math.abs(Math.ceil(diff/86400000))} day(s)</span>`;
+    else if (diff < 86400000) dlEl.innerHTML = `<span class="text-amber-400">⏰ Due today!</span>`;
+    else dlEl.innerHTML = `<span class="text-on-surface-variant">📅 Due in ${Math.ceil(diff/86400000)} day(s) — ${task.deadline}</span>`;
+  }
+}
+
+let timerInterval;
+function startTimer() {
+  if (!task.deadline) return;
+  timerInterval = setInterval(() => {
+    const dl = new Date(task.deadline + 'T23:59:59');
+    const diff = dl - Date.now();
+    const dlEl = document.getElementById('deadline-timer');
+    if (diff < 0) { dlEl.innerHTML = `<span class="text-red-400">⚠ Overdue</span>`; clearInterval(timerInterval); }
+    else {
+      const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000);
+      dlEl.innerHTML = `<span class="text-on-surface-variant">⏱ ${Math.floor(diff/86400000)}d ${h}h ${m}m remaining</span>`;
+    }
+  }, 60000);
+}
+
+function markDirty() {
+  isDirty = true;
+  document.getElementById('save-btn').classList.remove('hidden');
+}
+
+async function saveTask() {
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const tags = document.getElementById('task-tags').value.split(',').map(s=>s.trim()).filter(Boolean);
+    await Api.tasks.update(taskId, {
+      title: document.getElementById('task-title').value,
+      description: document.getElementById('task-desc').value,
+      priority: document.getElementById('task-priority').value,
+      deadline: document.getElementById('task-deadline').value,
+      assigneeId: document.getElementById('task-assignee').value || null,
+      tags,
+    });
+    isDirty = false;
+    btn.classList.add('hidden');
+    showToast('Task saved!', 'success');
+    task = await Api.tasks.get(taskId);
+    populateForm();
+    loadTimeline();
+  } catch(err) { showToast(err.message, 'error'); }
+  btn.disabled = false; btn.textContent = 'Save';
+}
+
+async function quickMoveStatus() {
+  try {
+    await Api.tasks.moveStatus(taskId, document.getElementById('task-status').value);
+    showToast('Status updated', 'success');
+    loadTimeline();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+async function deleteTask() {
+  if (!confirm('Delete this task permanently?')) return;
+  try { await Api.tasks.delete(taskId); showToast('Task deleted', 'success'); goBack(); }
+  catch(err) { showToast(err.message, 'error'); }
+}
+
+// Files
+async function loadFiles() {
+  const list = document.getElementById('files-list');
+  try {
+    const files = await Api.files.list(taskId);
+    if (!files.length) { list.innerHTML = '<div class="text-xs text-on-surface-variant">No attachments yet.</div>'; return; }
+    list.innerHTML = files.map(f => `
+      <div class="flex items-center gap-3 bg-white/3 rounded-lg p-2.5">
+        <span class="material-symbols-outlined text-[#ff4500] text-base" style="font-variation-settings:'FILL' 1">${f.mimetype?.startsWith('image/') ? 'image' : 'description'}</span>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm truncate">${f.original_name}</p>
+          <p class="text-[10px] text-on-surface-variant">${f.uploader_name} · ${timeAgo(f.created_at)}</p>
+        </div>
+        <a href="${Api.files.downloadUrl(f.id)}" class="material-symbols-outlined text-on-surface-variant hover:text-on-surface text-base">download</a>
+      </div>
+    `).join('');
+  } catch { list.innerHTML = '<div class="text-xs text-red-400">Failed to load files.</div>'; }
+}
+
+async function uploadFiles(fileList) {
+  for (const file of fileList) {
+    try {
+      const fd = new FormData(); fd.append('file', file);
+      await Api.files.upload(taskId, fd);
+      showToast(`Uploaded ${file.name}`, 'success');
+    } catch(err) { showToast(err.message, 'error'); }
+  }
+  loadFiles();
+  document.getElementById('file-upload').value = '';
+}
+
+// Notes
+async function loadNotes() {
+  const list = document.getElementById('notes-list');
+  try {
+    const notes = await Api.tasks.getNotes(taskId);
+    if (!notes.length) { list.innerHTML = '<div class="text-xs text-on-surface-variant">No notes yet.</div>'; return; }
+    list.innerHTML = notes.map(n => `
+      <div class="bg-white/3 rounded-lg p-3">
+        <div class="flex items-center gap-2 mb-1">
+          <div class="w-5 h-5 rounded-full bg-[#ff4500] flex items-center justify-center text-white text-[8px] font-bold">${avatarInitials(n.author_name)}</div>
+          <span class="text-xs text-on-surface-variant">${n.author_name} · ${timeAgo(n.created_at)}</span>
+        </div>
+        <p class="text-sm">${n.content}</p>
+      </div>
+    `).join('');
+  } catch { list.innerHTML = '<div class="text-xs text-red-400">Failed to load notes.</div>'; }
+}
+
+async function addNote() {
+  const input = document.getElementById('note-input');
+  const content = input.value.trim(); if (!content) return;
+  input.value = '';
+  try { await Api.tasks.addNote(taskId, content); loadNotes(); loadTimeline(); }
+  catch(err) { showToast(err.message, 'error'); }
+}
+
+// Timeline
+async function loadTimeline() {
+  const list = document.getElementById('timeline-list');
+  try {
+    const logs = await Api.activity.get(task?.project_id || projectId, { taskId, limit: 30 });
+    if (!logs.length) { list.innerHTML = '<div class="text-xs text-on-surface-variant">No activity yet.</div>'; return; }
+    list.innerHTML = logs.map(l => `
+      <div class="flex items-start gap-3">
+        <div class="w-7 h-7 rounded-full bg-[#ff4500] flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0 mt-0.5">${avatarInitials(l.user_name)}</div>
+        <div>
+          <p class="text-sm">${l.detail}</p>
+          <span class="text-[10px] text-on-surface-variant">${timeAgo(l.created_at)}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch { list.innerHTML = '<div class="text-xs text-red-400">Failed to load timeline.</div>'; }
+}
+
+init();
+
+// WebSocket real-time sync
+WS.connect();
+WS.on('auth_ok', () => {
+  // We need the project ID to join the project room
+  const linkId = task?.project_id || new URLSearchParams(window.location.search).get('projectId');
+  if (linkId) WS.joinProject(linkId);
+});
+
+WS.on('note_added', ({ note, taskId: tId }) => {
+  if (tId === taskId) {
+    loadNotes(); // Refresh notes when someone else adds one!
+    // Scroll to bottom optionally or just show toast
+    showToast(`New note from ${note.author_name}`, 'info');
+  }
+});
+
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+document.getElementById('menu-toggle')?.addEventListener('click', toggleSidebar);
+
+  // Handle logout from sidebar
+  document.getElementById('logout-btn')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+  document.getElementById('logout-btn-mobile')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+
+</script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>

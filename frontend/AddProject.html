@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<title>Ether - Create Project</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ff4500",
+              "primary-container": "#ff4500",
+              "surface": "#050505",
+              "on-surface": "#f0f0f0",
+              "on-surface-variant": "#a19f9e",
+              "surface-container": "#0f0f0f",
+              "outline": "#1a1a1a",
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Epilogue"],
+              "label": ["Epilogue"]
+            },
+            borderRadius: {"DEFAULT": "0.75rem", "lg": "1.5rem", "xl": "2.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Epilogue', sans-serif; background-color: #050505; color: #f0f0f0; }
+        .glass-panel { background: rgba(20, 20, 20, 0.7); backdrop-filter:blur(28px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
+        input::placeholder, textarea::placeholder { font-weight: 300; opacity: 0.4; }
+    
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+
+
+/* Sidebar */
+  .sidebar{background:#101010;border-right:1px solid rgba(255,255,255,0.04);width:240px;min-height:100vh;position:fixed;left:0;top:0;z-index:40;display:flex;flex-direction:column;transition:transform 0.3s ease;}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#6b7280;font-size:13px;font-weight:400;border-radius:10px;margin:2px 12px;transition:all 0.2s;}
+  .sidebar-link:hover{background:rgba(255,255,255,0.04);color:#e5e5e5;}
+  .sidebar-link.active{background:rgba(255,69,0,0.08);color:#ff4500;font-weight:500;}
+  .sidebar-link .material-symbols-outlined{font-size:20px;}
+
+  /* Stat cards with colored accents */
+  .stat-card{border-radius:16px;padding:20px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.12;border-radius:16px;}
+  .stat-card-yellow{background:#181600;}
+  .stat-card-yellow::before{background:linear-gradient(135deg,#E8D44D,transparent 70%);}
+  .stat-card-green{background:#001808;}
+  .stat-card-green::before{background:linear-gradient(135deg,#4ADE80,transparent 70%);}
+  .stat-card-purple{background:#110024;}
+  .stat-card-purple::before{background:linear-gradient(135deg,#C084FC,transparent 70%);}
+
+  .project-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:20px;transition:all 0.25s;cursor:pointer;}
+  .project-card:hover{border-color:rgba(255,69,0,0.25);background:rgba(30,30,30,0.9);transform:translateY(-2px);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp 0.4s ease forwards;}
+
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+
+  /* Dark form reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.04) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+  /* Mobile: hide sidebar, show bottom nav */
+  @media (max-width: 768px) {
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0 !important;}
+    .mobile-header{display:flex !important;}
+  }
+  @media (min-width: 769px) {
+    .mobile-header{display:none !important;}
+  }
+</style>
+</head>
+<body class="text-on-surface bg-[#0a0a0a]">
+<!-- Sidebar (Desktop) -->
+<aside class="sidebar no-scrollbar">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2.5 mb-1">
+      <img src="/images/icon-192.png" alt="Planzo" class="w-8 h-8 rounded-lg"/>
+      <span class="text-lg font-display font-semibold text-white tracking-tight">Planzo</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 py-2">
+    <a href="dashboard.html" class="sidebar-link">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>Dashboard
+    </a>
+    <a href="projects.html" class="sidebar-link active">
+      <span class="material-symbols-outlined">folder</span>Projects
+    </a>
+    <a href="calendar.html" class="sidebar-link">
+      <span class="material-symbols-outlined">calendar_today</span>Calendar
+    </a>
+    <a href="draw.html" class="sidebar-link">
+      <span class="material-symbols-outlined">draw</span>Whiteboard
+    </a>
+
+    <div class="mt-6 mb-2 px-6">
+      <div class="h-px bg-white/5"></div>
+    </div>
+
+    <a href="notifications.html" class="sidebar-link" id="notif-link">
+      <span class="material-symbols-outlined">notifications</span>Notifications
+      <span id="notif-badge" class="hidden ml-auto text-[10px] bg-[#ff4500] text-white w-5 h-5 rounded-full flex items-center justify-center font-semibold"></span>
+    </a>
+    <a href="settings.html" class="sidebar-link">
+      <span class="material-symbols-outlined">settings</span>Settings
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-white/5">
+    <button id="logout-btn" class="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-400/5">
+      <span class="material-symbols-outlined">logout</span>Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Header -->
+<header class="mobile-header hidden sticky top-0 z-50 items-center justify-between px-4 py-3 bg-[#0c0c0c]/90 backdrop-blur border-b border-white/5">
+  <button id="menu-toggle" class="material-symbols-outlined text-on-surface-variant">menu</button>
+  <span class="font-display font-semibold text-base">Planzo</span>
+  <div class="flex gap-2">
+    <a href="notifications.html" class="material-symbols-outlined text-on-surface-variant text-xl relative">notifications
+      <span id="notif-badge-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-[#ff4500] rounded-full text-white text-[8px] flex items-center justify-center font-bold"></span>
+    </a>
+    <button id="logout-btn-mobile" class="material-symbols-outlined text-on-surface-variant text-xl">logout</button>
+  </div>
+</header>
+
+<!-- Sidebar overlay for mobile -->
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/50 z-30" onclick="toggleSidebar()"></div>
+
+<main class="main-content flex flex-col min-h-screen" style="margin-left:240px;">
+
+  <div class="px-6 md:px-10 py-6 max-w-[1400px] mx-auto w-full flex-1">
+    <div class="flex items-center gap-4 mb-6">
+      <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border border-white/10">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    </div>
+
+<!-- Background Screen (SCREEN_12) - Blurred & Dimmed -->
+<div class="fixed inset-0 z-0 blur-3xl brightness-[0.3] scale-105 pointer-events-none overflow-hidden">
+
+<main class="p-8 pt-32 max-w-screen-2xl mx-auto grid grid-cols-12 gap-8">
+<div class="col-span-8 space-y-8">
+<div class="h-64 rounded-2xl bg-white/5"></div>
+<div class="grid grid-cols-2 gap-8">
+<div class="h-48 rounded-2xl bg-white/5"></div>
+<div class="h-48 rounded-2xl bg-white/5"></div>
+</div>
+</div>
+<div class="col-span-4 space-y-8">
+<div class="h-[500px] rounded-2xl bg-white/5"></div>
+</div>
+</main>
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-40 flex items-center justify-center p-4">
+<div class="glass-panel w-full max-w-2xl rounded-2xl shadow-[0_30px_90px_rgba(0,0,0,0.8)] border border-white/10 relative flex flex-col max-h-[90vh]">
+<!-- Modal Header -->
+<div class="p-10 pb-6 flex justify-between items-center">
+<div>
+<h1 class="text-2xl font-semibold tracking-tight text-on-surface">New Project</h1>
+<p class="text-on-surface-variant text-sm font-light mt-0.5">Define your workspace parameters</p>
+</div>
+<button class="text-zinc-500 hover:text-white transition-colors p-2 rounded-2xl hover:bg-white/5">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<!-- Modal Content -->
+<div class="px-10 pb-10 space-y-12 overflow-y-auto custom-scrollbar flex-1">
+<!-- 1. Identity -->
+<section class="space-y-8">
+<div class="relative group">
+<input class="w-full bg-transparent border-0 border-b border-white/5 focus:border-primary-container focus:ring-0 transition-all text-on-surface px-0 py-4 text-xl font-medium placeholder:text-zinc-600" placeholder="Project Name" type="text"/>
+</div>
+<div class="relative group">
+<textarea class="w-full bg-transparent border-0 border-b border-white/5 focus:border-primary-container focus:ring-0 transition-all text-on-surface px-0 py-2 resize-none text-sm font-light leading-relaxed placeholder:text-zinc-600" placeholder="A brief vision statement..." rows="2"></textarea>
+</div>
+</section>
+<!-- 2. Configuration Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="space-y-4">
+<label class="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold">Project Timeline</label>
+<div class="flex items-center gap-3 text-sm font-light group cursor-pointer hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg text-zinc-600">calendar_month</span>
+<span>Starts Nov 24, 2024</span>
+</div>
+</div>
+<div class="space-y-4">
+<label class="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold">Classification</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-1 bg-white/5 text-zinc-400 rounded-2xl text-[10px] font-medium border border-white/5 flex items-center gap-1.5">DESIGN <span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-white">close</span></span>
+<span class="px-2.5 py-1 bg-white/5 text-zinc-400 rounded-2xl text-[10px] font-medium border border-white/5 flex items-center gap-1.5">EDITORIAL <span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-white">close</span></span>
+<button class="text-zinc-600 hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3. Collaboration -->
+<section class="p-5 bg-white/[0.03] rounded-2xl border border-white/5 flex items-center justify-between">
+<div class="flex gap-4 items-center">
+<span class="material-symbols-outlined text-zinc-500">hub</span>
+<div>
+<h3 class="text-sm font-medium text-on-surface">Team Access</h3>
+<p class="text-xs text-zinc-500 font-light">Shared editing permissions</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-white/10 peer-focus:outline-none rounded-2xl peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-zinc-500 after:rounded-2xl after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container peer-checked:after:bg-white"></div>
+</label>
+</section>
+<!-- 4. Team Assembly -->
+<section class="space-y-6">
+<div class="flex gap-4 items-end">
+<div class="flex-1 border-b border-white/5 group focus-within:border-primary-container transition-colors">
+<input class="w-full bg-transparent border-0 focus:ring-0 text-sm py-2 font-light placeholder:text-zinc-600" placeholder="Invite by email..." type="text"/>
+</div>
+<button class="text-xs font-bold uppercase tracking-wider text-primary-container hover:text-red-400 transition-colors pb-2">Invite</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Individual Card -->
+<div class="flex items-center justify-between p-3 bg-white/[0.02] rounded-2xl border border-white/5 group">
+<div class="flex items-center gap-3">
+<img alt="Sarah Miller" class="w-8 h-8 rounded-2xl filter grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfXIJky-zeHCVbV-v2l87EKGLMAD8geVOT1XyfOo-N63HRst4ZQGU_Kk70ttz7HI4C7O-cw9u4hAB-NZEDb7qIA6s0k_7MX3mRUsQKSKVGl0jv-2hXItwlJIjPOGUUI81ciAgWo5RJySrfAGQkysOYW_hS2887WQH74SXJ_GPM5_-taTo8r8Rcbeqm_dM-fnGUoebZCqBdysHH4njNcPZJIeAXy2SYsLp57RRt7Ht3rQHlOgCFE1_TRCU0Qes39FQI-_V1Ah-BYu8"/>
+<div>
+<h4 class="text-xs font-medium text-zinc-300">Sarah Miller</h4>
+<p class="text-[9px] text-zinc-600 uppercase tracking-widest">Admin</p>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-white/5 rounded">
+<span class="material-symbols-outlined text-sm text-zinc-600">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/[0.02] rounded-2xl border border-white/5 group">
+<div class="flex items-center gap-3">
+<img alt="Marcus Chen" class="w-8 h-8 rounded-2xl filter grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJb8Mrkhdw-miA1rjsR4zZZCyxPzgWMbWbNB1V0elfgNtUWjZQ4SIbAf9dC-nFAS2b6it4RedS82-bUmPigEoWaQpJmaYUaz5LtBva2ttr4cCfEOwnypXskmx7kTxaiidiKgCYTbpfirbnxauZAebtKmYs302rnJBK4_AVPZy-JZ398V4FZNYMpalaUrxbTKWhvd10GYD7sYWSJGYTuAkC-6d9qgo09mV3F9bwyDBpOvsgQlbjhffpaX2tYoBMpHpiOSue7LgmYtI"/>
+<div>
+<h4 class="text-xs font-medium text-zinc-300">Marcus Chen</h4>
+<p class="text-[9px] text-zinc-600 uppercase tracking-widest">Editor</p>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-white/5 rounded">
+<span class="material-symbols-outlined text-sm text-zinc-600">close</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 5. Minimal Dropzone -->
+<section>
+<div class="border border-dashed border-white/10 rounded-2xl p-6 flex items-center justify-center gap-4 bg-white/[0.01] hover:bg-white/[0.03] transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-zinc-600 group-hover:text-zinc-400">upload_file</span>
+<span class="text-xs font-light text-zinc-500">Drop initial assets or <span class="text-zinc-300 font-medium underline underline-offset-4">browse files</span></span>
+</div>
+</section>
+</div>
+<!-- Modal Actions -->
+<div class="p-10 pt-4 flex items-center justify-between border-t border-white/5 bg-white/[0.01]">
+<button class="text-zinc-500 font-medium text-xs uppercase tracking-[0.15em] hover:text-white transition-colors">Discard</button>
+<button class="bg-primary-container text-white px-8 py-3 rounded-2xl font-semibold text-xs uppercase tracking-[0.1em] hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary-container/20">
+                    Create Project
+                </button>
+</div>
+</div>
+</div>
+<!-- BottomNavBar (The Signature Shell Component) - Hidden in focused UI but present -->
+  </div>
+</main>
+
+<script src="/js/pwa.js">
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+document.getElementById('menu-toggle')?.addEventListener('click', toggleSidebar);
+
+  // Handle logout from sidebar
+  document.getElementById('logout-btn')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+  document.getElementById('logout-btn-mobile')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+
+</script>
+</body></html>

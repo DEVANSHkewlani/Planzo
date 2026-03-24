@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@100;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#474646",
+              "primary": "#ff4500",
+              "outline": "#ae8785",
+              "on-primary-fixed-variant": "#930015",
+              "on-error": "#690005",
+              "surface-container-low": "#0f0f0f",
+              "on-tertiary": "#00344f",
+              "on-primary": "#68000c",
+              "secondary-container": "#4a4949",
+              "on-secondary-fixed": "#0f0f0f",
+              "outline-variant": "#2a2a2a",
+              "background": "#050505",
+              "primary-container": "#ff4500",
+              "on-surface": "#f0f0f0",
+              "on-tertiary-container": "#e9f3ff",
+              "tertiary-fixed": "#cae6ff",
+              "on-tertiary-fixed-variant": "#004b70",
+              "on-tertiary-fixed": "#001e30",
+              "tertiary-fixed-dim": "#888888",
+              "inverse-surface": "#f0f0f0",
+              "inverse-on-surface": "#313030",
+              "on-primary-container": "#ffeeed",
+              "primary-fixed": "#ffdad7",
+              "tertiary": "#888888",
+              "surface-container-lowest": "#050505",
+              "on-background": "#f0f0f0",
+              "secondary-fixed-dim": "#c8c6c5",
+              "secondary-fixed": "#f0f0f0",
+              "tertiary-container": "#4b5563",
+              "on-primary-fixed": "#410004",
+              "primary-fixed-dim": "#ff4500",
+              "on-error-container": "#ffdad6",
+              "surface-container-high": "#141414",
+              "surface-bright": "#393939",
+              "on-secondary-container": "#bab8b7",
+              "surface-dim": "#050505",
+              "surface": "#050505",
+              "surface-container": "#0f0f0f",
+              "surface-variant": "#1a1a1a",
+              "error": "#ffb4ab",
+              "surface-tint": "#ff4500",
+              "surface-container-highest": "#1a1a1a",
+              "on-surface-variant": "#888888",
+              "on-secondary": "#313030",
+              "secondary": "#c8c6c5",
+              "inverse-primary": "#c0001f",
+              "error-container": "#93000a"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Epilogue"],
+              "label": ["Epilogue"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Epilogue', sans-serif; }
+        .glass-panel {
+            background: rgba(53, 53, 52, 0.4);
+            backdrop-filter:blur(28px);
+            -webkit-backdrop-filter:blur(28px);
+        }
+        .liquid-bg {
+            background: radial-gradient(circle at top right, rgba(255,69,0, 0.08), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(141, 205, 255, 0.03), transparent 30%);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+
+
+/* Sidebar */
+  .sidebar{background:#101010;border-right:1px solid rgba(255,255,255,0.04);width:240px;min-height:100vh;position:fixed;left:0;top:0;z-index:40;display:flex;flex-direction:column;transition:transform 0.3s ease;}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#6b7280;font-size:13px;font-weight:400;border-radius:10px;margin:2px 12px;transition:all 0.2s;}
+  .sidebar-link:hover{background:rgba(255,255,255,0.04);color:#e5e5e5;}
+  .sidebar-link.active{background:rgba(255,69,0,0.08);color:#ff4500;font-weight:500;}
+  .sidebar-link .material-symbols-outlined{font-size:20px;}
+
+  /* Stat cards with colored accents */
+  .stat-card{border-radius:16px;padding:20px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.12;border-radius:16px;}
+  .stat-card-yellow{background:#181600;}
+  .stat-card-yellow::before{background:linear-gradient(135deg,#E8D44D,transparent 70%);}
+  .stat-card-green{background:#001808;}
+  .stat-card-green::before{background:linear-gradient(135deg,#4ADE80,transparent 70%);}
+  .stat-card-purple{background:#110024;}
+  .stat-card-purple::before{background:linear-gradient(135deg,#C084FC,transparent 70%);}
+
+  .project-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:20px;transition:all 0.25s;cursor:pointer;}
+  .project-card:hover{border-color:rgba(255,69,0,0.25);background:rgba(30,30,30,0.9);transform:translateY(-2px);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp 0.4s ease forwards;}
+
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+
+  /* Dark form reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.04) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+  /* Mobile: hide sidebar, show bottom nav */
+  @media (max-width: 768px) {
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0 !important;}
+    .mobile-header{display:flex !important;}
+  }
+  @media (min-width: 769px) {
+    .mobile-header{display:none !important;}
+  }
+</style>
+</head>
+<body class="text-on-surface bg-[#0a0a0a]">
+<!-- Sidebar (Desktop) -->
+<aside class="sidebar no-scrollbar">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2.5 mb-1">
+      <img src="/images/icon-192.png" alt="Planzo" class="w-8 h-8 rounded-lg"/>
+      <span class="text-lg font-display font-semibold text-white tracking-tight">Planzo</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 py-2">
+    <a href="dashboard.html" class="sidebar-link">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>Dashboard
+    </a>
+    <a href="projects.html" class="sidebar-link active">
+      <span class="material-symbols-outlined">folder</span>Projects
+    </a>
+    <a href="calendar.html" class="sidebar-link">
+      <span class="material-symbols-outlined">calendar_today</span>Calendar
+    </a>
+    <a href="draw.html" class="sidebar-link">
+      <span class="material-symbols-outlined">draw</span>Whiteboard
+    </a>
+
+    <div class="mt-6 mb-2 px-6">
+      <div class="h-px bg-white/5"></div>
+    </div>
+
+    <a href="notifications.html" class="sidebar-link" id="notif-link">
+      <span class="material-symbols-outlined">notifications</span>Notifications
+      <span id="notif-badge" class="hidden ml-auto text-[10px] bg-[#ff4500] text-white w-5 h-5 rounded-full flex items-center justify-center font-semibold"></span>
+    </a>
+    <a href="settings.html" class="sidebar-link">
+      <span class="material-symbols-outlined">settings</span>Settings
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-white/5">
+    <button id="logout-btn" class="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-400/5">
+      <span class="material-symbols-outlined">logout</span>Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Header -->
+<header class="mobile-header hidden sticky top-0 z-50 items-center justify-between px-4 py-3 bg-[#0c0c0c]/90 backdrop-blur border-b border-white/5">
+  <button id="menu-toggle" class="material-symbols-outlined text-on-surface-variant">menu</button>
+  <span class="font-display font-semibold text-base">Planzo</span>
+  <div class="flex gap-2">
+    <a href="notifications.html" class="material-symbols-outlined text-on-surface-variant text-xl relative">notifications
+      <span id="notif-badge-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-[#ff4500] rounded-full text-white text-[8px] flex items-center justify-center font-bold"></span>
+    </a>
+    <button id="logout-btn-mobile" class="material-symbols-outlined text-on-surface-variant text-xl">logout</button>
+  </div>
+</header>
+
+<!-- Sidebar overlay for mobile -->
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/50 z-30" onclick="toggleSidebar()"></div>
+
+<main class="main-content flex flex-col min-h-screen" style="margin-left:240px;">
+
+  <div class="px-6 md:px-10 py-6 max-w-[1400px] mx-auto w-full flex-1">
+    <div class="flex items-center gap-4 mb-6">
+      <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border border-white/10">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    </div>
+
+<!-- Background Project Workspace (Dimmed/Blurred) -->
+<main class="fixed inset-0 w-full h-full liquid-bg overflow-hidden blur-[40px] opacity-60 scale-105 pointer-events-none">
+<!-- TopAppBar (Simulated Background) -->
+
+<!-- Mock Content -->
+<section class="pt-32 px-12 grid grid-cols-12 gap-8">
+<div class="col-span-8 space-y-12">
+<div class="h-64 rounded-2xl bg-surface-container-high opacity-50"></div>
+<div class="grid grid-cols-2 gap-8">
+<div class="h-48 rounded-2xl bg-surface-container-low"></div>
+<div class="h-48 rounded-2xl bg-surface-container-low"></div>
+</div>
+</div>
+<div class="col-span-4 space-y-8">
+<div class="h-96 rounded-2xl bg-surface-container-highest opacity-40"></div>
+</div>
+</section>
+</main>
+<!-- Overlay & Modal -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/40">
+<div class="glass-panel w-full max-w-4xl max-h-[921px] overflow-hidden rounded-2xl flex flex-col shadow-2xl border border-white/5">
+<!-- Modal Header -->
+<div class="px-10 py-8 flex justify-between items-center border-b border-white/5">
+<div>
+<h2 class="text-3xl font-bold tracking-tighter text-white">New Task</h2>
+<p class="text-on-surface-variant text-sm mt-1">Add a new action item to the Phoenix Initiative</p>
+</div>
+<button class="p-2 rounded-2xl hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-zinc-400">close</span>
+</button>
+</div>
+<!-- Modal Content (Scrollable) -->
+<form class="flex-1 overflow-y-auto hide-scrollbar px-10 py-8 space-y-10">
+<!-- Row 1: Task Name -->
+<div class="space-y-3">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Task Name</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-2xl px-6 py-4 text-lg font-medium text-white focus:ring-2 focus:ring-primary-container placeholder:text-zinc-600 transition-all" placeholder="e.g. Architect brand guidelines" type="text"/>
+</div>
+<!-- Row 2: Description -->
+<div class="space-y-3">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Description</label>
+<textarea class="w-full bg-surface-container-lowest border-none rounded-2xl px-6 py-4 text-base text-on-surface focus:ring-2 focus:ring-primary-container placeholder:text-zinc-600 resize-none transition-all" placeholder="Detail the core objectives..." rows="3"></textarea>
+</div>
+<!-- Row 3: Grid (Priority, Deadline) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-3">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Priority</label>
+<div class="relative group">
+<select class="w-full appearance-none bg-surface-container-lowest border-none rounded-2xl px-6 py-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all cursor-pointer">
+<option>Low</option>
+<option>Medium</option>
+<option selected="">High</option>
+<option>Critical</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">expand_more</span>
+</div>
+</div>
+<div class="space-y-3">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Deadline</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-none rounded-2xl px-6 py-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all cursor-pointer" type="date"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">calendar_today</span>
+</div>
+</div>
+</div>
+<!-- Row 4: Assign To -->
+<div class="space-y-3">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Assign To</label>
+<div class="flex flex-wrap gap-4 items-center bg-surface-container-lowest p-4 rounded-2xl">
+<div class="flex -space-x-3">
+<img class="w-10 h-10 rounded-2xl border-2 border-surface-container-lowest object-cover" data-alt="Female team member profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDII8pX9GEtT3z83aBhwzZPe79iXpuikAbn7nVfW3aRNrzDCoaWnUamwKxZfyJ2WPs-pj7h1oeYYBayrq-1VFpkC3qC5zdWQ00tgpdoBe3SuUkayFGPni6wXu0uZcVOA83zVFbdNAtvlO8fv9Qnf-nWW3mMQmzYIyGDpSSpBrIWflaJetePX9n95SWeK202pBKJzH0EwKMsRsgywWKTJYYlx8w3DiTz7z6EzzTZhNxljS46On44CKQhtOTCWUHSc_LSPK9uxud_h4"/>
+<img class="w-10 h-10 rounded-2xl border-2 border-surface-container-lowest object-cover" data-alt="Male team member profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB85agBJMF09KMJWBJzIIkfHOfqPJNyidrm0jCZ0XYGWrPMJv6C20rhZX9nHibsD4xc8ay-oVOL1YfTxkV4mAExA3dyhiNROsXQt0-wYpgJ41Qel3hw_GfRBWIxm4pMz_pFqUyohAhND9sXp-mc2IPms2_yEjLSKnNvtZEOsnHFsNoVVbiPzLvLKfWWkKOm55eHqShvjLGV1ml1ACa3mCSjHoqdSm6ENlhUaQf8UEfo65hcmhFQE2lpBy7WrFCVwQsJh9eZt5CQM9k"/>
+<div class="w-10 h-10 rounded-2xl border-2 border-surface-container-lowest bg-surface-container-high flex items-center justify-center text-[10px] font-bold text-zinc-400">+2</div>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors text-sm font-medium" type="button">
+<span class="material-symbols-outlined text-sm">add</span>
+                            Add Member
+                        </button>
+</div>
+</div>
+<!-- Row 5: Tags -->
+<div class="space-y-3">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Tags</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 bg-primary-container/10 border border-primary-container/30 text-primary-container text-xs font-bold rounded-2xl">Interface</span>
+<span class="px-4 py-2 bg-white/5 border border-white/10 text-zinc-400 text-xs font-bold rounded-2xl">Engineering</span>
+<span class="px-4 py-2 bg-white/5 border border-white/10 text-zinc-400 text-xs font-bold rounded-2xl">Marketing</span>
+<button class="px-3 py-2 bg-white/5 hover:bg-white/10 text-zinc-500 rounded-2xl" type="button">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+<!-- Row 6: Notes -->
+<div class="space-y-3">
+<label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Internal Notes</label>
+<textarea class="w-full bg-surface-container-lowest border-none rounded-2xl px-6 py-4 text-base text-on-surface focus:ring-2 focus:ring-primary-container placeholder:text-zinc-600 resize-none transition-all" placeholder="Private notes for the team..." rows="2"></textarea>
+</div>
+</form>
+<!-- Modal Footer -->
+<div class="px-10 py-8 bg-surface-container-high/30 flex justify-end gap-6 items-center">
+<button class="text-sm font-bold uppercase tracking-widest text-zinc-400 hover:text-white transition-colors" type="button">Discard</button>
+<button class="bg-primary-container px-10 py-4 rounded-2xl text-white font-bold uppercase tracking-widest shadow-lg shadow-primary-container/20 hover:scale-105 active:scale-95 transition-all" type="submit">
+                    Create Task
+                </button>
+</div>
+</div>
+</div>
+<!-- BottomNavBar (The Blueprint Execution) -->
+  </div>
+</main>
+
+<script src="/js/pwa.js">
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+document.getElementById('menu-toggle')?.addEventListener('click', toggleSidebar);
+
+  // Handle logout from sidebar
+  document.getElementById('logout-btn')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+  document.getElementById('logout-btn-mobile')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+
+</script>
+</body></html>

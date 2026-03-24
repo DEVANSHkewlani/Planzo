@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<title>Planzo — Sign In</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ff4500","on-surface":"#f0f0f0","on-surface-variant":"#9ca3af","surface":"#111111","surface-container":"#141414","surface-container-high":"#181818","surface-container-highest":"#1e1e1e","outline-variant":"#2a2a2a"},fontFamily:{sans:["Martian Mono","monospace"]},borderRadius:{DEFAULT:"1rem",sm:"0.75rem",md:"1rem",lg:"1.5rem",xl:"2rem",full:"9999px"}}}}</script>
+<style>
+  *{font-family:'Inter',sans-serif;font-weight:400;}
+  h1,h2,h3{font-family:'Clash Display',sans-serif;}
+  body{background:#0a0a0a;background-image:radial-gradient(ellipse at 70% 0%,rgba(255,69,0,0.15),transparent 55%),radial-gradient(ellipse at 20% 100%,rgba(156,163,175,0.06),transparent 50%);min-height:100vh;color:#f0f0f0;}
+  .glass{background:rgba(17,17,17,0.8);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.07);border-radius:1rem;}
+  .input-field{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;width:100%;transition:border-color 0.2s,box-shadow 0.2s;outline:none;font-family:'Inter',sans-serif;font-size:0.875rem;}
+  .input-field:focus{border-color:rgba(255,69,0,0.5);box-shadow:0 0 0 3px rgba(255,69,0,0.1);}
+  .input-field::placeholder{color:#6b7280;}
+  .btn-primary{background:#ff4500;color:#fff;font-weight:700;padding:0.875rem 1.5rem;border-radius:0.875rem;width:100%;transition:opacity 0.2s,transform 0.1s;cursor:pointer;border:none;font-family:'Inter',sans-serif;letter-spacing:0.02em;box-shadow:0 0 24px rgba(255,69,0,0.3);}
+  .btn-primary:hover{opacity:0.9;}
+  .btn-primary:active{transform:scale(0.98);}
+  .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+  .tab-active{color:#ff4500;border-bottom:2px solid #ff4500;}
+  .tab-inactive{color:#6b7280;border-bottom:2px solid transparent;}
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp 0.5s ease forwards;}
+
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select,
+  [type="email"], [type="password"], [type="text"], [type="tel"] {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+  .input-field {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    color: #f0f0f0 !important;
+  }
+
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+<div class="w-full max-w-md fade-up">
+  <!-- Logo -->
+  <div class="text-center mb-8">
+    <a href="/" class="inline-block text-2xl font-black tracking-tighter text-[#ff4500]" style="font-family:'Inter',sans-serif;">Planzo</a>
+    <p class="text-on-surface-variant text-sm mt-1">Where great teams flow</p>
+  </div>
+
+  <div class="glass p-8">
+    <!-- Tabs -->
+    <div class="flex gap-0 border-b border-white/5 mb-8">
+      <button id="tab-login" onclick="switchTab('login')" class="flex-1 pb-3 text-sm font-semibold transition-all tab-active">Sign In</button>
+      <button id="tab-signup" onclick="switchTab('signup')" class="flex-1 pb-3 text-sm font-semibold transition-all tab-inactive">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1.5 uppercase tracking-widest">Email</label>
+        <input id="login-email" type="email" class="input-field" placeholder="you@example.com" required autocomplete="email"/>
+      </div>
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1.5 uppercase tracking-widest">Password</label>
+        <div class="relative">
+          <input id="login-password" type="password" class="input-field pr-10" placeholder="••••••••" required autocomplete="current-password"/>
+          <button type="button" onclick="togglePw('login-password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface material-symbols-outlined text-base">visibility</button>
+        </div>
+      </div>
+      <div id="login-error" class="hidden text-red-400 text-xs py-2 px-3 bg-red-400/10 rounded-lg"></div>
+      <button type="submit" id="login-btn" class="btn-primary">Sign In</button>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="form-signup" onsubmit="handleSignup(event)" class="space-y-4 hidden">
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1.5 uppercase tracking-widest">Full Name</label>
+        <input id="signup-name" type="text" class="input-field" placeholder="Alex Johnson" required autocomplete="name"/>
+      </div>
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1.5 uppercase tracking-widest">Email</label>
+        <input id="signup-email" type="email" class="input-field" placeholder="you@example.com" required autocomplete="email"/>
+      </div>
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1.5 uppercase tracking-widest">Phone (optional)</label>
+        <input id="signup-phone" type="tel" class="input-field" placeholder="+1 555 000 0000"/>
+      </div>
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1.5 uppercase tracking-widest">Password</label>
+        <div class="relative">
+          <input id="signup-password" type="password" class="input-field pr-10" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password"/>
+          <button type="button" onclick="togglePw('signup-password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface material-symbols-outlined text-base">visibility</button>
+        </div>
+      </div>
+      <div id="signup-error" class="hidden text-red-400 text-xs py-2 px-3 bg-red-400/10 rounded-lg"></div>
+      <button type="submit" id="signup-btn" class="btn-primary">Create Account</button>
+    </form>
+  </div>
+
+  <p class="text-center text-on-surface-variant/40 text-xs mt-6">© 2026 Planzo</p>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+  // Redirect if already logged in
+  if (Api.isLoggedIn()) window.location.href = '/dashboard.html';
+
+  // Check URL param for default tab
+  const urlParams = new URLSearchParams(location.search);
+  if (urlParams.get('mode') === 'signup') switchTab('signup');
+
+  function switchTab(tab) {
+    document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('form-signup').classList.toggle('hidden', tab !== 'signup');
+    document.getElementById('tab-login').className = 'flex-1 pb-3 text-sm font-semibold transition-all ' + (tab === 'login' ? 'tab-active' : 'tab-inactive');
+    document.getElementById('tab-signup').className = 'flex-1 pb-3 text-sm font-semibold transition-all ' + (tab === 'signup' ? 'tab-active' : 'tab-inactive');
+  }
+
+  function togglePw(id) {
+    const el = document.getElementById(id);
+    el.type = el.type === 'password' ? 'text' : 'password';
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const errEl = document.getElementById('login-error');
+    btn.disabled = true; btn.textContent = 'Signing in...';
+    errEl.classList.add('hidden');
+    try {
+      const { token, user } = await Api.auth.login({
+        email: document.getElementById('login-email').value,
+        password: document.getElementById('login-password').value,
+      });
+      Api.setSession(token, user);
+      window.location.href = '/dashboard.html';
+    } catch(err) {
+      errEl.textContent = err.message;
+      errEl.classList.remove('hidden');
+      btn.disabled = false; btn.textContent = 'Sign In';
+    }
+  }
+
+  async function handleSignup(e) {
+    e.preventDefault();
+    const btn = document.getElementById('signup-btn');
+    const errEl = document.getElementById('signup-error');
+    btn.disabled = true; btn.textContent = 'Creating account...';
+    errEl.classList.add('hidden');
+    try {
+      const { token, user } = await Api.auth.signup({
+        name: document.getElementById('signup-name').value,
+        email: document.getElementById('signup-email').value,
+        phone: document.getElementById('signup-phone').value,
+        password: document.getElementById('signup-password').value,
+      });
+      Api.setSession(token, user);
+      window.location.href = '/dashboard.html';
+    } catch(err) {
+      errEl.textContent = err.message;
+      errEl.classList.remove('hidden');
+      btn.disabled = false; btn.textContent = 'Create Account';
+    }
+  }
+</script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>

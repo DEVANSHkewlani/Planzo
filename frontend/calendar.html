@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<title>Planzo — Calendar</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"#ff4500","on-surface":"#f0f0f0","on-surface-variant":"#9ca3af","surface-container-high":"#181818"},borderRadius:{DEFAULT:"1rem",sm:"0.75rem",full:"9999px"}}}}</script>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+
+<style>
+  *{font-family:'Inter',sans-serif;font-weight:400;}
+  body{background:#0a0a0a;min-height:100vh;color:#f0f0f0;}
+  .glass{background:rgba(17,17,17,0.75);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.06);border-radius:1rem;}
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+
+  /* FullCalendar customization */
+  .fc-theme-standard td, .fc-theme-standard th, .fc-theme-standard .fc-scrollgrid { border-color: rgba(255,255,255,0.05); }
+  .fc-day-today { background: rgba(255,69,0,0.05) !important; }
+  ::root { --fc-today-bg-color: rgba(255,69,0,0.05); --fc-border-color: rgba(255,255,255,0.05); }
+  .fc .fc-button-primary { background-color: transparent !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #f0f0f0 !important; cursor: pointer; }
+  .fc .fc-button-primary:hover { background-color: rgba(255,69,0,0.1) !important; border-color: #ff4500 !important; }
+  .fc .fc-button-primary:not(:disabled).fc-button-active { background-color: #ff4500 !important; border-color: #ff4500 !important; color: white !important; }
+  .fc-h-event { border: none !important; border-radius: 4px; padding: 2px 4px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+  .fc-daygrid-day-number { color: #f0f0f0; text-decoration: none !important; }
+  .fc-col-header-cell-cushion { color: #9ca3af; text-transform: uppercase; font-size: 10px; tracking: 0.1em; }
+  
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); display:flex; justify-content:center; align-items:center; z-index: 1000; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+  .modal-overlay.open { opacity:1; pointer-events:auto; }
+
+
+/* Sidebar */
+  .sidebar{background:#101010;border-right:1px solid rgba(255,255,255,0.04);width:240px;min-height:100vh;position:fixed;left:0;top:0;z-index:40;display:flex;flex-direction:column;transition:transform 0.3s ease;}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#6b7280;font-size:13px;font-weight:400;border-radius:10px;margin:2px 12px;transition:all 0.2s;}
+  .sidebar-link:hover{background:rgba(255,255,255,0.04);color:#e5e5e5;}
+  .sidebar-link.active{background:rgba(255,69,0,0.08);color:#ff4500;font-weight:500;}
+  .sidebar-link .material-symbols-outlined{font-size:20px;}
+
+  /* Stat cards with colored accents */
+  .stat-card{border-radius:16px;padding:20px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.12;border-radius:16px;}
+  .stat-card-yellow{background:#181600;}
+  .stat-card-yellow::before{background:linear-gradient(135deg,#E8D44D,transparent 70%);}
+  .stat-card-green{background:#001808;}
+  .stat-card-green::before{background:linear-gradient(135deg,#4ADE80,transparent 70%);}
+  .stat-card-purple{background:#110024;}
+  .stat-card-purple::before{background:linear-gradient(135deg,#C084FC,transparent 70%);}
+
+  .project-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:20px;transition:all 0.25s;cursor:pointer;}
+  .project-card:hover{border-color:rgba(255,69,0,0.25);background:rgba(30,30,30,0.9);transform:translateY(-2px);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp 0.4s ease forwards;}
+
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+
+  /* Dark form reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.04) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+  /* Mobile: hide sidebar, show bottom nav */
+  @media (max-width: 768px) {
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0 !important;}
+    .mobile-header{display:flex !important;}
+  }
+  @media (min-width: 769px) {
+    .mobile-header{display:none !important;}
+  }
+</style>
+</head>
+<body class="text-on-surface bg-[#0a0a0a]">
+<!-- Sidebar (Desktop) -->
+<aside class="sidebar no-scrollbar">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2.5 mb-1">
+      <img src="/images/icon-192.png" alt="Planzo" class="w-8 h-8 rounded-lg"/>
+      <span class="text-lg font-display font-semibold text-white tracking-tight">Planzo</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 py-2">
+    <a href="dashboard.html" class="sidebar-link">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>Dashboard
+    </a>
+    <a href="projects.html" class="sidebar-link">
+      <span class="material-symbols-outlined">folder</span>Projects
+    </a>
+    <a href="calendar.html" class="sidebar-link active">
+      <span class="material-symbols-outlined">calendar_today</span>Calendar
+    </a>
+    <a href="draw.html" class="sidebar-link">
+      <span class="material-symbols-outlined">draw</span>Whiteboard
+    </a>
+
+    <div class="mt-6 mb-2 px-6">
+      <div class="h-px bg-white/5"></div>
+    </div>
+
+    <a href="notifications.html" class="sidebar-link" id="notif-link">
+      <span class="material-symbols-outlined">notifications</span>Notifications
+      <span id="notif-badge" class="hidden ml-auto text-[10px] bg-[#ff4500] text-white w-5 h-5 rounded-full flex items-center justify-center font-semibold"></span>
+    </a>
+    <a href="settings.html" class="sidebar-link">
+      <span class="material-symbols-outlined">settings</span>Settings
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-white/5">
+    <button id="logout-btn" class="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-400/5">
+      <span class="material-symbols-outlined">logout</span>Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Header -->
+<header class="mobile-header hidden sticky top-0 z-50 items-center justify-between px-4 py-3 bg-[#0c0c0c]/90 backdrop-blur border-b border-white/5">
+  <button id="menu-toggle" class="material-symbols-outlined text-on-surface-variant">menu</button>
+  <span class="font-display font-semibold text-base">Planzo</span>
+  <div class="flex gap-2">
+    <a href="notifications.html" class="material-symbols-outlined text-on-surface-variant text-xl relative">notifications
+      <span id="notif-badge-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-[#ff4500] rounded-full text-white text-[8px] flex items-center justify-center font-bold"></span>
+    </a>
+    <button id="logout-btn-mobile" class="material-symbols-outlined text-on-surface-variant text-xl">logout</button>
+  </div>
+</header>
+
+<!-- Sidebar overlay for mobile -->
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/50 z-30" onclick="toggleSidebar()"></div>
+
+<main class="main-content flex flex-col min-h-screen" style="margin-left:240px;">
+
+  <div class="px-6 md:px-10 py-6 max-w-[1400px] mx-auto w-full flex-1">
+    <div class="flex items-center gap-4 mb-6">
+      <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border border-white/10">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    </div>
+
+<main class="flex-1 overflow-hidden p-6 max-w-6xl w-full mx-auto" style="height: calc(100vh - 72px);">
+  <div class="glass p-4 h-full" id="calendar"></div>
+</main>
+
+<!-- Event Modal -->
+<div id="event-modal" class="modal-overlay">
+  <div class="glass w-full max-w-sm rounded-2xl p-6 relative">
+    <button onclick="closeModal()" class="absolute top-4 right-4 text-on-surface-variant hover:text-white material-symbols-outlined">close</button>
+    <h2 id="modal-title" class="text-xl font-bold mb-4">Add Event</h2>
+    
+    <form id="event-form" class="space-y-4">
+      <input type="hidden" id="event-id">
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1 uppercase tracking-widest">Title</label>
+        <input id="event-title" type="text" class="w-full rounded-lg" required>
+      </div>
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1 uppercase tracking-widest">Description</label>
+        <textarea id="event-desc" class="w-full rounded-lg" rows="2"></textarea>
+      </div>
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1 uppercase tracking-widest">Start</label>
+        <input id="event-start" type="datetime-local" class="w-full rounded-lg text-sm" style="font-size:12px;" required>
+      </div>
+      <div>
+        <label class="block text-xs text-on-surface-variant mb-1 uppercase tracking-widest">End</label>
+        <input id="event-end" type="datetime-local" class="w-full rounded-lg text-sm" style="font-size:12px;" required>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="event-allday" class="rounded bg-white/5 border-white/10 text-primary focus:ring-primary focus:ring-offset-0">
+        <label class="text-sm">All-day event</label>
+      </div>
+      <div class="flex justify-between items-center pt-2">
+        <button type="button" id="delete-btn" onclick="deleteEvent()" class="text-xs text-red-500 hover:text-red-400 hidden">Delete</button>
+        <button type="submit" class="bg-[#ff4500] text-white px-4 py-2 rounded-lg font-bold text-sm ml-auto">Save Event</button>
+      </div>
+    </form>
+  </div>
+</div>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script>
+if (!Api.isLoggedIn()) window.location.href = '/auth.html';
+
+let calendar;
+let allTasksFlat = [];
+
+document.addEventListener('DOMContentLoaded', async function() {
+  const calendarEl = document.getElementById('calendar');
+  
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    selectable: true,
+    selectMirror: true,
+    editable: true,
+    dayMaxEvents: true,
+    events: async function(info, successCallback, failureCallback) {
+      try {
+        // Fetch custom events
+        const dbEvents = await Api.events.list();
+        const mappedEvents = dbEvents.map(e => ({
+          id: e.id,
+          title: e.title,
+          start: e.start_time,
+          end: e.end_time,
+          allDay: !!e.is_all_day,
+          extendedProps: { description: e.description },
+          backgroundColor: '#ff4500'
+        }));
+        
+        // Fetch tasks with deadlines
+        if (allTasksFlat.length === 0) {
+          const projects = await Api.projects.list();
+          const taskPromises = projects.map(p => Api.tasks.list(p.id).then(ts => ts.map(t => ({ ...t, project_name: p.name }))).catch(() => []));
+          const all = await Promise.all(taskPromises);
+          allTasksFlat = all.flat().filter(t => t.deadline && t.status !== 'done');
+        }
+        
+        const mappedTasks = allTasksFlat.map(t => {
+          let color = '#6b7280';
+          if (t.priority === 'critical') color = '#ef4444';
+          if (t.priority === 'high') color = '#f97316';
+          if (t.priority === 'medium') color = '#f59e0b';
+          
+          return {
+            id: 'task_' + t.id,
+            title: `[Task] ${t.title}`,
+            start: t.deadline,
+            allDay: true,
+            backgroundColor: color,
+            url: `task.html?id=${t.id}&projectId=${t.project_id}`,
+            editable: false
+          };
+        });
+        
+        successCallback([...mappedEvents, ...mappedTasks]);
+      } catch(err) {
+        showToast('Failed to load events', 'error');
+        failureCallback(err);
+      }
+    },
+    select: function(info) {
+      openModal({ start: info.startStr, end: info.endStr, allDay: info.allDay });
+    },
+    eventClick: function(info) {
+      if (info.event.id.startsWith('task_')) return; // Tasks let URL handle click
+      info.jsEvent.preventDefault();
+      
+      openModal({
+        id: info.event.id,
+        title: info.event.title,
+        description: info.event.extendedProps.description,
+        start: info.event.startStr.slice(0, 16),
+        end: info.event.endStr ? info.event.endStr.slice(0, 16) : '',
+        allDay: info.event.allDay
+      });
+    },
+    eventDrop: async function(info) {
+      if (info.event.id.startsWith('task_')) { info.revert(); return; }
+      try {
+        await Api.events.update(info.event.id, {
+          start_time: info.event.startStr,
+          end_time: info.event.endStr || info.event.startStr,
+          is_all_day: info.event.allDay
+        });
+        showToast('Event updated');
+      } catch (e) {
+        info.revert();
+        showToast('Failed to update event', 'error');
+      }
+    },
+    eventResize: async function(info) {
+      try {
+        await Api.events.update(info.event.id, {
+          start_time: info.event.startStr,
+          end_time: info.event.endStr || info.event.startStr
+        });
+        showToast('Event resized');
+      } catch (e) {
+        info.revert();
+        showToast('Failed to update event', 'error');
+      }
+    }
+  });
+  
+  calendar.render();
+});
+
+// Modal Logic
+function openModal(data) {
+  document.getElementById('event-id').value = data.id || '';
+  document.getElementById('event-title').value = data.title || '';
+  document.getElementById('event-desc').value = data.description || '';
+  document.getElementById('event-start').value = data.start ? (data.start.length > 10 ? data.start.slice(0,16) : data.start + 'T09:00') : '';
+  document.getElementById('event-end').value = data.end ? (data.end.length > 10 ? data.end.slice(0,16) : data.end + 'T10:00') : '';
+  document.getElementById('event-allday').checked = !!data.allDay;
+  
+  document.getElementById('modal-title').textContent = data.id ? 'Edit Event' : 'Add Event';
+  document.getElementById('delete-btn').classList.toggle('hidden', !data.id);
+  
+  document.getElementById('event-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('event-modal').classList.remove('open');
+  document.getElementById('event-form').reset();
+}
+
+async function deleteEvent() {
+  const id = document.getElementById('event-id').value;
+  if (!id) return;
+  if (!confirm('Delete this event?')) return;
+  try {
+    await Api.events.delete(id);
+    showToast('Event deleted');
+    closeModal();
+    calendar.refetchEvents();
+  } catch(e) { showToast('Error deleting event', 'error'); }
+}
+
+document.getElementById('event-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('event-id').value;
+  const body = {
+    title: document.getElementById('event-title').value,
+    description: document.getElementById('event-desc').value,
+    start_time: document.getElementById('event-start').value,
+    end_time: document.getElementById('event-end').value,
+    is_all_day: document.getElementById('event-allday').checked
+  };
+  
+  try {
+    if (id) await Api.events.update(id, body);
+    else await Api.events.create(body);
+    
+    showToast(id ? 'Event updated' : 'Event created', 'success');
+    closeModal();
+    calendar.refetchEvents();
+  } catch(err) {
+    showToast(err.message || 'Failed to save event', 'error');
+  }
+});
+
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+document.getElementById('menu-toggle')?.addEventListener('click', toggleSidebar);
+
+  // Handle logout from sidebar
+  document.getElementById('logout-btn')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+  document.getElementById('logout-btn-mobile')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+
+</script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<title>Planzo — Settings</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"#ff4500","on-surface":"#f0f0f0","on-surface-variant":"#9ca3af","surface-container-high":"#181818"},borderRadius:{DEFAULT:"1rem",sm:"0.75rem",full:"9999px"}}}}</script>
+<style>
+  *{font-family:'Inter',sans-serif;font-weight:400;}
+  body{background:#0a0a0a;min-height:100vh;color:#f0f0f0;}
+  .glass{background:rgba(17,17,17,0.75);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.06);border-radius:1rem;}
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+
+
+/* Sidebar */
+  .sidebar{background:#101010;border-right:1px solid rgba(255,255,255,0.04);width:240px;min-height:100vh;position:fixed;left:0;top:0;z-index:40;display:flex;flex-direction:column;transition:transform 0.3s ease;}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#6b7280;font-size:13px;font-weight:400;border-radius:10px;margin:2px 12px;transition:all 0.2s;}
+  .sidebar-link:hover{background:rgba(255,255,255,0.04);color:#e5e5e5;}
+  .sidebar-link.active{background:rgba(255,69,0,0.08);color:#ff4500;font-weight:500;}
+  .sidebar-link .material-symbols-outlined{font-size:20px;}
+
+  /* Stat cards with colored accents */
+  .stat-card{border-radius:16px;padding:20px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.12;border-radius:16px;}
+  .stat-card-yellow{background:#181600;}
+  .stat-card-yellow::before{background:linear-gradient(135deg,#E8D44D,transparent 70%);}
+  .stat-card-green{background:#001808;}
+  .stat-card-green::before{background:linear-gradient(135deg,#4ADE80,transparent 70%);}
+  .stat-card-purple{background:#110024;}
+  .stat-card-purple::before{background:linear-gradient(135deg,#C084FC,transparent 70%);}
+
+  .project-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:20px;transition:all 0.25s;cursor:pointer;}
+  .project-card:hover{border-color:rgba(255,69,0,0.25);background:rgba(30,30,30,0.9);transform:translateY(-2px);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp 0.4s ease forwards;}
+
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+
+  /* Dark form reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.04) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+  /* Mobile: hide sidebar, show bottom nav */
+  @media (max-width: 768px) {
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0 !important;}
+    .mobile-header{display:flex !important;}
+  }
+  @media (min-width: 769px) {
+    .mobile-header{display:none !important;}
+  }
+</style>
+</head>
+<body class="text-on-surface bg-[#0a0a0a]">
+<!-- Sidebar (Desktop) -->
+<aside class="sidebar no-scrollbar">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2.5 mb-1">
+      <img src="/images/icon-192.png" alt="Planzo" class="w-8 h-8 rounded-lg"/>
+      <span class="text-lg font-display font-semibold text-white tracking-tight">Planzo</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 py-2">
+    <a href="dashboard.html" class="sidebar-link">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>Dashboard
+    </a>
+    <a href="projects.html" class="sidebar-link">
+      <span class="material-symbols-outlined">folder</span>Projects
+    </a>
+    <a href="calendar.html" class="sidebar-link">
+      <span class="material-symbols-outlined">calendar_today</span>Calendar
+    </a>
+    <a href="draw.html" class="sidebar-link">
+      <span class="material-symbols-outlined">draw</span>Whiteboard
+    </a>
+
+    <div class="mt-6 mb-2 px-6">
+      <div class="h-px bg-white/5"></div>
+    </div>
+
+    <a href="notifications.html" class="sidebar-link" id="notif-link">
+      <span class="material-symbols-outlined">notifications</span>Notifications
+      <span id="notif-badge" class="hidden ml-auto text-[10px] bg-[#ff4500] text-white w-5 h-5 rounded-full flex items-center justify-center font-semibold"></span>
+    </a>
+    <a href="settings.html" class="sidebar-link active">
+      <span class="material-symbols-outlined">settings</span>Settings
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-white/5">
+    <button id="logout-btn" class="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-400/5">
+      <span class="material-symbols-outlined">logout</span>Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Header -->
+<header class="mobile-header hidden sticky top-0 z-50 items-center justify-between px-4 py-3 bg-[#0c0c0c]/90 backdrop-blur border-b border-white/5">
+  <button id="menu-toggle" class="material-symbols-outlined text-on-surface-variant">menu</button>
+  <span class="font-display font-semibold text-base">Planzo</span>
+  <div class="flex gap-2">
+    <a href="notifications.html" class="material-symbols-outlined text-on-surface-variant text-xl relative">notifications
+      <span id="notif-badge-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-[#ff4500] rounded-full text-white text-[8px] flex items-center justify-center font-bold"></span>
+    </a>
+    <button id="logout-btn-mobile" class="material-symbols-outlined text-on-surface-variant text-xl">logout</button>
+  </div>
+</header>
+
+<!-- Sidebar overlay for mobile -->
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/50 z-30" onclick="toggleSidebar()"></div>
+
+<main class="main-content flex flex-col min-h-screen" style="margin-left:240px;">
+
+  <div class="px-6 md:px-10 py-6 max-w-[1400px] mx-auto w-full flex-1">
+    <div class="flex items-center gap-4 mb-6">
+      <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border border-white/10">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    </div>
+
+<main class="px-4 md:px-0 py-4 pb-20 max-w-[1200px] mx-auto w-full space-y-4">
+
+  <!-- Profile -->
+  <div class="glass p-5">
+    <div class="flex items-center gap-4 mb-5">
+      <div id="profile-avatar" class="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0" style="background:#ff4500"></div>
+      <div>
+        <h2 class="text-xl">Profile</h2>
+        <p class="text-xs text-on-surface-variant" id="profile-email">—</p>
+      </div>
+    </div>
+    <form onsubmit="saveProfile(event)" class="space-y-3">
+      <div><label class="text-[10px] text-on-surface-variant uppercase tracking-widest block mb-1.5">Full Name</label>
+        <input id="p-name" class="input-styled" placeholder="Your name"/></div>
+      <div><label class="text-[10px] text-on-surface-variant uppercase tracking-widest block mb-1.5">Phone</label>
+        <input id="p-phone" type="tel" class="input-styled" placeholder="+1 555 000 0000"/></div>
+      <button type="submit" id="profile-btn" class="w-full py-3 bg-[#ff4500] rounded-xl text-sm font-bold text-white hover:opacity-90">Save Profile</button>
+    </form>
+  </div>
+
+  <!-- Change Password -->
+  <div class="glass p-5">
+    <h2 class="text-xl mb-4">Change Password</h2>
+    <form onsubmit="changePassword(event)" class="space-y-3">
+      <div><label class="text-[10px] text-on-surface-variant uppercase tracking-widest block mb-1.5">Current Password</label>
+        <input id="pw-current" type="password" class="input-styled" placeholder="••••••••" required/></div>
+      <div><label class="text-[10px] text-on-surface-variant uppercase tracking-widest block mb-1.5">New Password</label>
+        <input id="pw-new" type="password" class="input-styled" placeholder="Min 6 characters" required minlength="6"/></div>
+      <div><label class="text-[10px] text-on-surface-variant uppercase tracking-widest block mb-1.5">Confirm New Password</label>
+        <input id="pw-confirm" type="password" class="input-styled" placeholder="Repeat new password" required/></div>
+      <div id="pw-error" class="hidden text-red-400 text-xs py-2 px-3 bg-red-400/10 rounded-lg"></div>
+      <button type="submit" id="pw-btn" class="w-full py-3 bg-[#ff4500] rounded-xl text-sm font-bold text-white hover:opacity-90">Change Password</button>
+    </form>
+  </div>
+
+  <!-- Account Actions -->
+  <div class="glass p-5">
+    <h2 class="text-xl mb-4">Account</h2>
+    <div class="space-y-3">
+      <div class="flex items-center justify-between py-2 border-b border-white/5">
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-on-surface-variant text-base">email</span><span class="text-sm">Notifications</span></div>
+        <span class="text-xs text-on-surface-variant">Email + In-app</span>
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-white/5">
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-on-surface-variant text-base">info</span><span class="text-sm">Version</span></div>
+        <span class="text-xs text-on-surface-variant">1.0.0 Beta</span>
+      </div>
+      <button onclick="logout()" class="w-full flex items-center gap-3 py-3 px-3 rounded-xl hover:bg-red-400/10 text-red-400 transition-colors">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">logout</span>
+        <span class="text-sm font-semibold">Sign out</span>
+      </button>
+    </div>
+  </div>
+</main>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script>
+if (!Api.isLoggedIn()) window.location.href = '/auth.html';
+
+async function init() {
+  const user = await Api.auth.me();
+  document.getElementById('p-name').value = user.name;
+  document.getElementById('p-phone').value = user.phone || '';
+  document.getElementById('profile-email').textContent = user.email;
+  document.getElementById('profile-avatar').innerHTML = avatarEl(user, 64);
+}
+
+async function saveProfile(e) {
+  e.preventDefault();
+  const btn = document.getElementById('profile-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const updated = await Api.auth.updateProfile({ name: document.getElementById('p-name').value, phone: document.getElementById('p-phone').value });
+    localStorage.setItem('lw_user', JSON.stringify(updated));
+    showToast('Profile saved!', 'success');
+    document.getElementById('profile-avatar').innerHTML = avatarEl(updated, 64);
+  } catch(err) { showToast(err.message, 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Profile';
+}
+
+async function changePassword(e) {
+  e.preventDefault();
+  const btn = document.getElementById('pw-btn');
+  const errEl = document.getElementById('pw-error');
+  const newPw = document.getElementById('pw-new').value;
+  const confirmPw = document.getElementById('pw-confirm').value;
+  errEl.classList.add('hidden');
+  if (newPw !== confirmPw) { errEl.textContent = 'Passwords do not match'; errEl.classList.remove('hidden'); return; }
+  btn.disabled = true; btn.textContent = 'Updating...';
+  try {
+    await Api.auth.changePassword({ currentPassword: document.getElementById('pw-current').value, newPassword: newPw });
+    showToast('Password changed!', 'success');
+    e.target.reset();
+  } catch(err) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+  btn.disabled = false; btn.textContent = 'Change Password';
+}
+
+function logout() { Api.clearSession(); WS.disconnect(); window.location.href = '/'; }
+init();
+
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+document.getElementById('menu-toggle')?.addEventListener('click', toggleSidebar);
+
+  // Handle logout from sidebar
+  document.getElementById('logout-btn')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+  document.getElementById('logout-btn-mobile')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+
+</script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>

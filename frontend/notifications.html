@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#ff4500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="/images/icon-192.png"/>
+<title>Planzo — Notifications</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"#ff4500","on-surface":"#f0f0f0","on-surface-variant":"#9ca3af","surface-container-high":"#181818"},borderRadius:{DEFAULT:"1rem",sm:"0.75rem",full:"9999px"}}}}</script>
+<style>
+  *{font-family:'Inter',sans-serif;font-weight:400;}
+  body{background:#0a0a0a;min-height:100vh;color:#f0f0f0;}
+  .glass{background:rgba(17,17,17,0.75);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.06);border-radius:1rem;}
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .no-scrollbar::-webkit-scrollbar{display:none;}
+
+  /* Global Dark Form Styles Reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.4) !important;
+  }
+
+
+/* Sidebar */
+  .sidebar{background:#101010;border-right:1px solid rgba(255,255,255,0.04);width:240px;min-height:100vh;position:fixed;left:0;top:0;z-index:40;display:flex;flex-direction:column;transition:transform 0.3s ease;}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#6b7280;font-size:13px;font-weight:400;border-radius:10px;margin:2px 12px;transition:all 0.2s;}
+  .sidebar-link:hover{background:rgba(255,255,255,0.04);color:#e5e5e5;}
+  .sidebar-link.active{background:rgba(255,69,0,0.08);color:#ff4500;font-weight:500;}
+  .sidebar-link .material-symbols-outlined{font-size:20px;}
+
+  /* Stat cards with colored accents */
+  .stat-card{border-radius:16px;padding:20px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.12;border-radius:16px;}
+  .stat-card-yellow{background:#181600;}
+  .stat-card-yellow::before{background:linear-gradient(135deg,#E8D44D,transparent 70%);}
+  .stat-card-green{background:#001808;}
+  .stat-card-green::before{background:linear-gradient(135deg,#4ADE80,transparent 70%);}
+  .stat-card-purple{background:#110024;}
+  .stat-card-purple::before{background:linear-gradient(135deg,#C084FC,transparent 70%);}
+
+  .project-card{background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:20px;transition:all 0.25s;cursor:pointer;}
+  .project-card:hover{border-color:rgba(255,69,0,0.25);background:rgba(30,30,30,0.9);transform:translateY(-2px);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .fade-up{animation:fadeUp 0.4s ease forwards;}
+
+  .input-styled{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .input-styled:focus{border-color:rgba(255,69,0,0.5);}
+  .input-styled::placeholder{color:#6b7280;}
+
+  /* Dark form reset */
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: rgba(255,255,255,0.04) !important;
+    color: #f0f0f0 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+  /* Mobile: hide sidebar, show bottom nav */
+  @media (max-width: 768px) {
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0 !important;}
+    .mobile-header{display:flex !important;}
+  }
+  @media (min-width: 769px) {
+    .mobile-header{display:none !important;}
+  }
+</style>
+</head>
+<body class="text-on-surface bg-[#0a0a0a]">
+<!-- Sidebar (Desktop) -->
+<aside class="sidebar no-scrollbar">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2.5 mb-1">
+      <img src="/images/icon-192.png" alt="Planzo" class="w-8 h-8 rounded-lg"/>
+      <span class="text-lg font-display font-semibold text-white tracking-tight">Planzo</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 py-2">
+    <a href="dashboard.html" class="sidebar-link">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>Dashboard
+    </a>
+    <a href="projects.html" class="sidebar-link">
+      <span class="material-symbols-outlined">folder</span>Projects
+    </a>
+    <a href="calendar.html" class="sidebar-link">
+      <span class="material-symbols-outlined">calendar_today</span>Calendar
+    </a>
+    <a href="draw.html" class="sidebar-link">
+      <span class="material-symbols-outlined">draw</span>Whiteboard
+    </a>
+
+    <div class="mt-6 mb-2 px-6">
+      <div class="h-px bg-white/5"></div>
+    </div>
+
+    <a href="notifications.html" class="sidebar-link active" id="notif-link">
+      <span class="material-symbols-outlined">notifications</span>Notifications
+      <span id="notif-badge" class="hidden ml-auto text-[10px] bg-[#ff4500] text-white w-5 h-5 rounded-full flex items-center justify-center font-semibold"></span>
+    </a>
+    <a href="settings.html" class="sidebar-link">
+      <span class="material-symbols-outlined">settings</span>Settings
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-white/5">
+    <button id="logout-btn" class="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-400/5">
+      <span class="material-symbols-outlined">logout</span>Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Header -->
+<header class="mobile-header hidden sticky top-0 z-50 items-center justify-between px-4 py-3 bg-[#0c0c0c]/90 backdrop-blur border-b border-white/5">
+  <button id="menu-toggle" class="material-symbols-outlined text-on-surface-variant">menu</button>
+  <span class="font-display font-semibold text-base">Planzo</span>
+  <div class="flex gap-2">
+    <a href="notifications.html" class="material-symbols-outlined text-on-surface-variant text-xl relative">notifications
+      <span id="notif-badge-mobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-[#ff4500] rounded-full text-white text-[8px] flex items-center justify-center font-bold"></span>
+    </a>
+    <button id="logout-btn-mobile" class="material-symbols-outlined text-on-surface-variant text-xl">logout</button>
+  </div>
+</header>
+
+<!-- Sidebar overlay for mobile -->
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/50 z-30" onclick="toggleSidebar()"></div>
+
+<main class="main-content flex flex-col min-h-screen" style="margin-left:240px;">
+
+  <div class="px-6 md:px-10 py-6 max-w-[1400px] mx-auto w-full flex-1">
+    <div class="flex items-center gap-4 mb-6">
+      <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border border-white/10">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    </div>
+
+<main class="px-4 md:px-0 py-4 pb-20 max-w-[1200px] mx-auto w-full">
+  <div id="notif-list" class="space-y-2">
+    <div class="text-center text-on-surface-variant text-sm py-12">Loading...</div>
+  </div>
+</main>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script>
+if (!Api.isLoggedIn()) window.location.href = '/auth.html';
+
+const typeIcons = {
+  task_assigned: 'assignment_ind', task_moved: 'swap_horiz', mention: 'alternate_email',
+  added_to_project: 'group_add', removed_from_project: 'person_remove', member_joined: 'how_to_reg',
+  tasks_unassigned: 'warning', deadline: 'schedule', default: 'notifications'
+};
+const typeColors = {
+  task_assigned: '#ff4500', tasks_unassigned: '#f59e0b', removed_from_project: '#ef4444',
+  mention: '#8b5cf6', added_to_project: '#10b981', default: '#6b7280'
+};
+
+async function load() {
+  try {
+    const notifs = await Api.notifications.list();
+    const list = document.getElementById('notif-list');
+    if (!notifs.length) { list.innerHTML = '<div class="text-center text-on-surface-variant text-sm py-12">No notifications yet.</div>'; return; }
+    list.innerHTML = notifs.map(n => {
+      const icon = typeIcons[n.type] || typeIcons.default;
+      const color = typeColors[n.type] || typeColors.default;
+      return `<div class="glass border ${n.read ? 'border-white/5' : 'border-[#ff4500]/20'} p-4 rounded-xl flex items-start gap-3 ${n.read ? 'opacity-60' : ''}">
+        <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:${color}22">
+          <span class="material-symbols-outlined text-base" style="color:${color};font-variation-settings:'FILL' 1">${icon}</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm">${n.message}</p>
+          ${n.project_name ? `<p class="text-[10px] text-on-surface-variant mt-0.5">${n.project_name}</p>` : ''}
+          <p class="text-[10px] text-on-surface-variant mt-0.5">${timeAgo(n.created_at)}</p>
+        </div>
+        <div class="flex gap-1 flex-shrink-0">
+          ${!n.read ? `<button onclick="markRead('${n.id}',this)" class="material-symbols-outlined text-on-surface-variant hover:text-[#ff4500] text-base" title="Mark read">done</button>` : ''}
+          <button onclick="deleteNotif('${n.id}',this)" class="material-symbols-outlined text-on-surface-variant hover:text-red-400 text-base" title="Delete">close</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch { showToast('Failed to load notifications', 'error'); }
+}
+
+async function markRead(id, btn) {
+  await Api.notifications.markRead(id);
+  const card = btn.closest('.glass');
+  card.classList.add('opacity-60'); card.style.border = '1px solid rgba(255,255,255,0.05)';
+  btn.remove();
+}
+
+async function deleteNotif(id, btn) {
+  await Api.notifications.delete(id);
+  btn.closest('.glass').remove();
+}
+
+async function markAll() {
+  await Api.notifications.markAllRead();
+  showToast('All marked as read', 'success'); load();
+}
+
+// Real-time new notifications
+WS.connect();
+WS.on('notification', ({ notification }) => { showToast(notification.message, 'info'); load(); });
+
+load();
+
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+document.getElementById('menu-toggle')?.addEventListener('click', toggleSidebar);
+
+  // Handle logout from sidebar
+  document.getElementById('logout-btn')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+  document.getElementById('logout-btn-mobile')?.addEventListener('click', () => { Api.auth.logout(); window.location.href = '/login.html'; });
+
+</script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>
