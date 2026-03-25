@@ -98,14 +98,21 @@
     
   /* Global Dark Form Styles Reset */
   input:not([type="checkbox"]):not([type="radio"]), textarea, select {
-    background-color: rgba(255,255,255,0.05) !important;
+    background-color: #000000 !important;
     color: #f0f0f0 !important;
     border: 1px solid rgba(255,255,255,0.1) !important;
   }
   input::placeholder, textarea::placeholder {
     color: rgba(255,255,255,0.4) !important;
   }
-
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #000000 inset !important;
+    -webkit-text-fill-color: #f0f0f0 !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 </style>
 </head>
 <body class="bg-surface text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
@@ -135,7 +142,7 @@
 <div class="space-y-2">
 <div class="flex justify-between items-center px-1">
 <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant/80">Password</label>
-<a class="text-[10px] uppercase tracking-widest text-primary hover:text-primary-container transition-colors" href="#">Forgot?</a>
+<a class="text-[10px] uppercase tracking-widest text-primary hover:text-primary-container transition-colors" href="/forgot-password.html">Forgot?</a>
 </div>
 <div class="relative group">
 <input class="w-full bg-surface-container-lowest/50 border-none rounded-2xl px-4 py-4 text-on-surface placeholder:text-on-secondary-container/30 focus:ring-1 focus:ring-primary-container transition-all duration-300" placeholder="••••••••" type="password"/>

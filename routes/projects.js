@@ -193,4 +193,45 @@ router.delete('/:id/members/:userId', authenticate, (req, res) => {
   res.json({ success: true, unassignedCount: unassigned.length });
 });
 
+// POST /api/projects/:id/leave - leave a project (any member/manager)
+router.post('/:id/leave', authenticate, (req, res) => {
+  const member = db.prepare('SELECT * FROM project_members WHERE project_id = ? AND user_id = ?').get(req.params.id, req.user.id);
+  if (!member) return res.status(403).json({ error: 'Not a member of this project' });
+
+  // Prevent the sole admin from leaving
+  if (member.role === 'admin') {
+    const adminCount = db.prepare("SELECT COUNT(*) as cnt FROM project_members WHERE project_id = ? AND role = 'admin'").get(req.params.id);
+    if (adminCount.cnt <= 1) {
+      return res.status(400).json({ error: 'You are the only admin. Transfer admin rights before leaving.' });
+    }
+  }
+
+  // Unassign tasks assigned to this user
+  const unassigned = db.prepare('SELECT id, title FROM tasks WHERE project_id = ? AND assignee_id = ?').all(req.params.id, req.user.id);
+  db.prepare('UPDATE tasks SET assignee_id = NULL WHERE project_id = ? AND assignee_id = ?').run(req.params.id, req.user.id);
+
+  // Notify admins/managers about unassigned tasks
+  if (unassigned.length > 0) {
+    const managers = db.prepare("SELECT user_id FROM project_members WHERE project_id = ? AND role IN ('admin','manager') AND user_id != ?").all(req.params.id, req.user.id);
+    managers.forEach(m => {
+      createNotification(m.user_id, req.params.id, null, 'tasks_unassigned',
+        `${req.user.name} left the project. ${unassigned.length} task(s) are now unassigned.`);
+    });
+  }
+
+  // Remove user from project
+  db.prepare('DELETE FROM project_members WHERE project_id = ? AND user_id = ?').run(req.params.id, req.user.id);
+
+  // Notify admins
+  const admins = db.prepare("SELECT user_id FROM project_members WHERE project_id = ? AND role IN ('admin','manager')").all(req.params.id);
+  admins.forEach(a => {
+    createNotification(a.user_id, req.params.id, null, 'member_left', `${req.user.name} left the project`);
+  });
+
+  logActivity(req.params.id, null, req.user.id, 'member_left', `${req.user.name} left the project`);
+  broadcast(req.params.id, { type: 'member_removed', userId: req.user.id });
+
+  res.json({ success: true, unassignedCount: unassigned.length });
+});
+
 module.exports = router;

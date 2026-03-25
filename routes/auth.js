@@ -79,5 +79,50 @@ router.put('/password', (req, res) => {
     res.json({ success: true });
   } catch { res.status(401).json({ error: 'Invalid token' }); }
 });
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email is required' });
+
+  const user = db.prepare('SELECT id, name, email FROM users WHERE email = ?').get(email);
+  // Always return success to prevent email enumeration
+  if (!user) return res.json({ success: true, message: 'If that email is registered, a reset link has been generated.' });
+
+  // Generate a short-lived reset token (15 min)
+  const resetToken = jwt.sign({ id: user.id, email: user.email, purpose: 'password_reset' }, JWT_SECRET, { expiresIn: '15m' });
+
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const resetLink = `${baseUrl}/reset-password.html?token=${resetToken}`;
+
+  try {
+    // Simply return the reset link in the response since we aren't using email
+    res.json({ success: true, resetLink, message: 'Reset link generated successfully.' });
+  } catch (err) {
+    console.error('Email send error:', err);
+    res.status(500).json({ error: 'Failed to send reset email. Please try again later.' });
+  }
+});
+
+// POST /api/auth/reset-password
+router.post('/reset-password', (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) return res.status(400).json({ error: 'Token and new password are required' });
+  if (newPassword.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    if (payload.purpose !== 'password_reset') return res.status(400).json({ error: 'Invalid reset token' });
+
+    const user = db.prepare('SELECT id FROM users WHERE id = ?').get(payload.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const hash = bcrypt.hashSync(newPassword, 10);
+    db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, user.id);
+    res.json({ success: true, message: 'Password has been reset successfully. You can now log in.' });
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') return res.status(400).json({ error: 'Reset link has expired. Please request a new one.' });
+    res.status(400).json({ error: 'Invalid or expired reset token' });
+  }
+});
 
 module.exports = router;

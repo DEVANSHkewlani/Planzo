@@ -19,7 +19,7 @@
   h1,h2,h3{font-family:'Clash Display',sans-serif;}
   body{background:#0a0a0a;background-image:radial-gradient(ellipse at 70% 0%,rgba(255,69,0,0.15),transparent 55%),radial-gradient(ellipse at 20% 100%,rgba(156,163,175,0.06),transparent 50%);min-height:100vh;color:#f0f0f0;}
   .glass{background:rgba(17,17,17,0.8);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.07);border-radius:1rem;}
-  .input-field{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;width:100%;transition:border-color 0.2s,box-shadow 0.2s;outline:none;font-family:'Inter',sans-serif;font-size:0.875rem;}
+  .input-field{background:#000000;border:1px solid rgba(255,255,255,0.08);border-radius:0.75rem;color:#f0f0f0;padding:0.75rem 1rem;width:100%;transition:border-color 0.2s,box-shadow 0.2s;outline:none;font-family:'Inter',sans-serif;font-size:0.875rem;}
   .input-field:focus{border-color:rgba(255,69,0,0.5);box-shadow:0 0 0 3px rgba(255,69,0,0.1);}
   .input-field::placeholder{color:#6b7280;}
   .btn-primary{background:#ff4500;color:#fff;font-weight:700;padding:0.875rem 1.5rem;border-radius:0.875rem;width:100%;transition:opacity 0.2s,transform 0.1s;cursor:pointer;border:none;font-family:'Inter',sans-serif;letter-spacing:0.02em;box-shadow:0 0 24px rgba(255,69,0,0.3);}
@@ -35,7 +35,7 @@
   /* Global Dark Form Styles Reset */
   input:not([type="checkbox"]):not([type="radio"]), textarea, select,
   [type="email"], [type="password"], [type="text"], [type="tel"] {
-    background-color: rgba(255,255,255,0.05) !important;
+    background-color: #000000 !important;
     color: #f0f0f0 !important;
     border: 1px solid rgba(255,255,255,0.1) !important;
   }
@@ -43,9 +43,18 @@
     color: rgba(255,255,255,0.4) !important;
   }
   .input-field {
-    background: rgba(255,255,255,0.04) !important;
+    background: #000000 !important;
     border: 1px solid rgba(255,255,255,0.08) !important;
     color: #f0f0f0 !important;
+  }
+  
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #000000 inset !important;
+    -webkit-text-fill-color: #f0f0f0 !important;
+    transition: background-color 5000s ease-in-out 0s;
   }
 
 </style>
@@ -81,6 +90,9 @@
       </div>
       <div id="login-error" class="hidden text-red-400 text-xs py-2 px-3 bg-red-400/10 rounded-lg"></div>
       <button type="submit" id="login-btn" class="btn-primary">Sign In</button>
+      <div class="text-center mt-3">
+        <a href="/forgot-password.html" class="text-xs text-[#ff4500] hover:underline underline-offset-4 font-medium">Forgot Password?</a>
+      </div>
     </form>
 
     <!-- Signup Form -->

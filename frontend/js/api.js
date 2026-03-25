@@ -69,6 +69,7 @@ const Api = {
     addMember: (id, body) => Api.post(`/projects/${id}/members`, body),
     changeMemberRole: (id, userId, role) => Api.put(`/projects/${id}/members/${userId}/role`, { role }),
     removeMember: (id, userId) => Api.del(`/projects/${id}/members/${userId}`),
+    leave: (id) => Api.post(`/projects/${id}/leave`),
   },
 
   // Tasks
